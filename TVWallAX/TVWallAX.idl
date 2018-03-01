@@ -1,0 +1,49 @@
+// TVWallAX.idl : ActiveX 控件项目的类型库源。
+
+// 此文件将由 MIDL 编译器工具处理以
+// 产生类型库(TVWallAX.tlb)，该类型库将成为
+// TVWallAX.ocx.
+
+#include <olectl.h>
+#include <idispids.h>
+
+[ uuid(B03F7467-A270-461D-957D-50392DB52CFA), version(1.0),
+  control ]
+library TVWallAXLib
+{
+	importlib(STDOLE_TLB);
+
+	//  CTVWallAXCtrl 的主调度接口
+	[ 
+		uuid(287392D1-CAFD-4EBA-9B4C-E87C491F3638)	
+	]
+	dispinterface _DTVWallAX
+	{
+		properties:
+		methods:
+	};
+
+	//  CTVWallAXCtrl 的事件调度接口
+
+	[ 
+		uuid(8E0C406E-DBCD-4EE0-8F89-618CBDEF4765)	
+	]
+	dispinterface _DTVWallAXEvents
+	{
+		properties:
+			//  事件接口没有任何属性
+
+		methods:
+	};
+
+	//  CTVWallAXCtrl 的类信息
+	[
+		uuid(C639E623-F7C2-445E-B889-9D72B467D4F4)
+	]
+	coclass TVWallAX
+	{
+		[default] dispinterface _DTVWallAX;
+		[default, source] dispinterface _DTVWallAXEvents;
+	};
+
+};
