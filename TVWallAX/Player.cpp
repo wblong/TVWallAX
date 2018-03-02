@@ -12,11 +12,13 @@ IMPLEMENT_DYNAMIC(CPlayer, CWnd)
 
 CPlayer::CPlayer()
 : m_bSelected(false)
+, m_bIsMaxsize(false)
 {
 	//RegisterWindowClass();
 	m_edgeColor = RGB(255,255,0);
 	m_edgeSelColor = RGB(255, 0, 0);
 	m_bSelected = false;
+	m_bIsMaxsize = false;
 }
 
 CPlayer::~CPlayer()
@@ -139,9 +141,13 @@ BOOL CPlayer::PreTranslateMessage(MSG* pMsg)
 	// TODO:  在此添加专用代码和/或调用基类
 	// TODO:  在此添加专用代码和/或调用基类
 	if (pMsg->message == WM_LBUTTONDOWN){
-		CWnd*pWnd = FromHandle(pMsg->hwnd);
+		
 		::SendMessage(GetParent()->m_hWnd, WM_LBUTTONDOWN, 0, 0);
 		//return 0;
+	}
+	if (pMsg->message == WM_LBUTTONDBLCLK){
+
+		::SendMessage(GetParent()->m_hWnd, WM_LBUTTONDBLCLK, 0, 0);
 	}
 	return CWnd::PreTranslateMessage(pMsg);
 }
@@ -151,4 +157,18 @@ void CPlayer::SetSelected(bool Selected)
 {
 	m_bSelected = Selected;
 	Invalidate();
+}
+
+
+// 获取最大化状态
+bool CPlayer::GetMaxSizeStatus()
+{
+	return m_bIsMaxsize;
+}
+
+
+// 设置最大化状态
+void CPlayer::SetMaxSizeStatus(bool bMaxSize)
+{
+	m_bIsMaxsize = bMaxSize;
 }

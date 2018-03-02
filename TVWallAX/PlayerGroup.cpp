@@ -27,6 +27,7 @@ BEGIN_MESSAGE_MAP(CPlayerGroup, CWnd)
 	ON_WM_PAINT()
 	ON_WM_SIZE()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 
@@ -44,13 +45,14 @@ void CPlayerGroup::RecalWndPos()
 	int nWidth;
 	int nHeight;
 	int nPos;
-	//清空所有CRect
+	//清空所有CRect,并初始化原始状态
 	for (nPos = 0; nPos < m_nplayWindowCount; nPos++){
 
 		m_rcWnd[nPos] = CRect(0, 0, 0, 0);
+		m_player[nPos].rcWnd = CRect(0, 0, 0, 0);
 		m_player[nPos].SetSelected(false);
+		m_player[nPos].SetMaxSizeStatus(false);
 	}
-	//
 	//得到最大化CRect
 	m_rcWndMax = rcWindow;
 	//计算各个显示数量时的CRect
@@ -267,6 +269,9 @@ void CPlayerGroup::RecalWndPos()
 
 		}
 	}
+	//记录原始大小
+	for (int i = 0; i < m_nCount; ++i)
+		m_player[i].rcWnd = m_rcWnd[i];
 }
 
 BOOL CPlayerGroup::OnEraseBkgnd(CDC* pDC)
@@ -333,10 +338,13 @@ void CPlayerGroup::OnLButtonDown(UINT nFlags, CPoint point)
 	POINT pt;
 	CRect rect;
 	GetWindowRect(&rect);
+
+	GetCursorPos(&pt);
+	point.x = pt.x - rect.left;
+	point.y = pt.y - rect.top;
+
 	for (int i = 0; i < m_nCount; ++i){
-		GetCursorPos(&pt);
-		point.x = pt.x - rect.left;
-		point.y = pt.y - rect.top;
+		
 		if (m_rcWnd[i].PtInRect(point)){
 
 			m_player[i].SetSelected(true);
@@ -358,4 +366,50 @@ BOOL CPlayerGroup::PreTranslateMessage(MSG* pMsg)
 		return TRUE;
 	}
 	return CWnd::PreTranslateMessage(pMsg);
+}
+
+
+void CPlayerGroup::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	POINT pt;
+	CRect rect;
+	GetWindowRect(&rect);
+	CRect clientRect=rect;
+	ScreenToClient(clientRect);
+
+	GetCursorPos(&pt);
+	point.x = pt.x - rect.left;
+	point.y = pt.y - rect.top;
+
+	int MaxSel;
+	for (int i = 0; i < m_nCount; ++i){
+		
+		if (m_rcWnd[i].PtInRect(point)){
+			
+			MaxSel = i;
+			break;
+				
+		}
+	}
+
+	if (!m_player[MaxSel].GetMaxSizeStatus())//当前正常状态
+	{
+		m_rcWnd[MaxSel] = clientRect;
+		m_player[MaxSel].SetMaxSizeStatus(true);
+		for (int i = 0; i < m_nCount; ++i){
+			if (i != MaxSel)
+				m_rcWnd[i] = CRect(0, 0, 0, 0);
+		}
+	}
+	else{								//当前最大化状态
+		m_rcWnd[MaxSel] = m_player[MaxSel].rcWnd;
+		m_player[MaxSel].SetMaxSizeStatus(false);
+		for (int i = 0; i < m_nCount; ++i){
+			if (i != MaxSel)
+				m_rcWnd[i] = m_player[i].rcWnd;
+		}
+	}
+	Invalidate();
+	CWnd::OnLButtonDblClk(nFlags, point);
 }

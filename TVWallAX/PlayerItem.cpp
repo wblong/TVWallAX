@@ -65,8 +65,12 @@ BOOL CPlayerItem::PreTranslateMessage(MSG* pMsg)
 {
 	// TODO:  在此添加专用代码和/或调用基类
 	if (pMsg->message == WM_LBUTTONDOWN){
-		CWnd*pWnd = FromHandle(pMsg->hwnd);
+		
 		::SendMessage(GetParent()->m_hWnd, WM_LBUTTONDOWN, 0, 0);
+	}
+	if (pMsg->message == WM_LBUTTONDBLCLK){
+		
+		::SendMessage(GetParent()->m_hWnd,WM_LBUTTONDBLCLK,0,0);
 	}
 	return CWnd::PreTranslateMessage(pMsg);
 }

@@ -31,6 +31,7 @@ public:
 	void SetScreenCount(int nCount);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 };
 
 
