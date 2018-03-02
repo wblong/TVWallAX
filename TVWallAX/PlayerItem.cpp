@@ -40,6 +40,9 @@ BOOL CPlayerItem::OnEraseBkgnd(CDC* pDC)
 	GetWindowRect(&rcWindow);
 	rcWindow.OffsetRect(-rcWindow.TopLeft());
 	pDC->FillSolidRect(&rcWindow,RGB(120,120,120));
+	CString str;
+	str.Format(_T("%d"),this->GetDlgCtrlID()-IDC_PLAYERITEM+1);
+	pDC->DrawText(str, rcWindow, DT_SINGLELINE | DT_VCENTER|DT_CENTER);
 	return true;
 	//return CWnd::OnEraseBkgnd(pDC);
 }

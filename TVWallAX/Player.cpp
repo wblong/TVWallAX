@@ -109,7 +109,8 @@ int CPlayer::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	// TODO:  在此添加您专用的创建代码
-	m_playerItem.Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, IDC_CUSTOMER + 1);
+	UINT id = this->GetDlgCtrlID() - IDC_PLAYER;
+	m_playerItem.Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this,IDC_PLAYERITEM+id);
 	return 0;
 }
 

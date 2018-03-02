@@ -294,7 +294,7 @@ int CPlayerGroup::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	
 	for (int i = 0; i < m_nplayWindowCount; ++i){
 		//m_playerGroup.Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, IDC_CUSTOMER + 1);
-		m_player[i].Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0,0,0,0), this, IDC_CUSTOMER + i+1);
+		m_player[i].Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0,0,0,0), this, IDC_PLAYER + i);
 	}
 	return 0;
 }
@@ -382,6 +382,7 @@ void CPlayerGroup::OnLButtonDblClk(UINT nFlags, CPoint point)
 	point.x = pt.x - rect.left;
 	point.y = pt.y - rect.top;
 
+	//取得最大化窗口
 	int MaxSel;
 	for (int i = 0; i < m_nCount; ++i){
 		
