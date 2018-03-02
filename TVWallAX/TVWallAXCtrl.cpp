@@ -121,7 +121,18 @@ void CTVWallAXCtrl::OnDraw(
 	{
 		CRect rect = rcBounds;
 		rect.DeflateRect(0, 0, 0, 50);
-		m_playerGroup.MoveWindow(rect, true);///2
+		m_playerGroup.MoveWindow(rect);///2
+		for (UINT i = 0; i < 6; ++i){
+			
+			GetDlgItem(IDC_ONESCREEN+i)->MoveWindow(CRect(rect.left + 2*(i+1)+50*i, rect.bottom + 2, 
+				rect.left + 2 * (i + 1) + 50 * (i+1), rect.bottom + 42));
+		}
+		/*GetDlgItem(IDC_ONESCREEN)->MoveWindow(CRect(rect.left+2,rect.bottom+2,rect.left+52,rect.bottom+42));
+		GetDlgItem(IDC_FOURSCREEN)->MoveWindow(CRect(rect.left + 2, rect.bottom + 2, rect.left + 52, rect.bottom + 42));
+		GetDlgItem(IDC_SIXSCREEN)->MoveWindow(CRect(rect.left + 2, rect.bottom + 2, rect.left + 52, rect.bottom + 42));
+		GetDlgItem(IDC_EIGHTSCREEN)->MoveWindow(CRect(rect.left + 2, rect.bottom + 2, rect.left + 52, rect.bottom + 42));
+		GetDlgItem(IDC_NINESCREEN)->MoveWindow(CRect(rect.left + 2, rect.bottom + 2, rect.left + 52, rect.bottom + 42));
+		GetDlgItem(IDC_SIXTEENSCREEN)->MoveWindow(CRect(rect.left + 2, rect.bottom + 2, rect.left + 52, rect.bottom + 42));*/
 	}
 	//DoSuperclassPaint(pdc, rcBounds);
 }
@@ -201,6 +212,22 @@ int CTVWallAXCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// TODO:  在此添加您专用的创建代码
 	m_playerGroup.Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, IDC_PLAYERGROUP);
 	//
+	DWORD dwStyle = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
+
+	CBitmapButton* OneScreen = new CBitmapButton();
+	OneScreen->Create(_T("ONE"), dwStyle, CRect(0,0,0,0), this, IDC_FOURSCREEN);
+
+	CBitmapButton* FourScreen = new CBitmapButton();
+	FourScreen->Create(_T("FOUR"), dwStyle, CRect(0, 0, 0, 0), this, IDC_SIXSCREEN);
+
+	CBitmapButton* EightScreen = new CBitmapButton();
+	EightScreen->Create(_T("EIGHT"), dwStyle, CRect(0, 0, 0, 0), this, IDC_EIGHTSCREEN);
+
+	CBitmapButton* NineScreen = new CBitmapButton();
+	NineScreen->Create(_T("NINE"), dwStyle, CRect(0, 0, 0, 0), this, IDC_NINESCREEN);
+
+	CBitmapButton* SixteenScreen = new CBitmapButton();
+	SixteenScreen->Create(_T("SIXTEEN"), dwStyle, CRect(0, 0, 0, 0), this, IDC_SIXTEENSCREEN);
 
 	return 0;
 }
@@ -229,7 +256,7 @@ BOOL CTVWallAXCtrl::PreTranslateMessage(MSG* pMsg)
 	if (pMsg->message == WM_LBUTTONDOWN){
 		/*CWnd*pWnd = FromHandle(pMsg->hwnd);
 		::SendMessage(GetParent()->m_hWnd, WM_LBUTTONDOWN, 0, 0);*/
-		return 0;
+		//return 0;
 	}
 	return COleControl::PreTranslateMessage(pMsg);
 }

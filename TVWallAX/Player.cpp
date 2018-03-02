@@ -15,8 +15,8 @@ CPlayer::CPlayer()
 , m_bIsMaxsize(false)
 {
 	//RegisterWindowClass();
-	m_edgeColor = RGB(255,255,0);
-	m_edgeSelColor = RGB(255, 0, 0);
+	m_edgeColor = RGB(255,255,255);
+	m_edgeSelColor = RGB(255, 255, 0);
 	m_bSelected = false;
 	m_bIsMaxsize = false;
 }
