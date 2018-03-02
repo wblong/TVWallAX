@@ -4,15 +4,15 @@
 #include "stdafx.h"
 #include "TVWallAX.h"
 #include "PlayerGroup.h"
-
-
 // CPlayerGroup
 
 IMPLEMENT_DYNAMIC(CPlayerGroup, CWnd)
 
 CPlayerGroup::CPlayerGroup()
 {
-	m_nCount = 1;
+	m_nCount = 16;
+	m_nplayWindowCount = 16;
+
 }
 
 CPlayerGroup::~CPlayerGroup()
@@ -26,6 +26,7 @@ BEGIN_MESSAGE_MAP(CPlayerGroup, CWnd)
 	ON_WM_CREATE()
 	ON_WM_PAINT()
 	ON_WM_SIZE()
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -47,7 +48,7 @@ void CPlayerGroup::RecalWndPos()
 	for (nPos = 0; nPos < m_nplayWindowCount; nPos++){
 
 		m_rcWnd[nPos] = CRect(0, 0, 0, 0);
-		m_player[nPos].rcWnd = CRect(0, 0, 0, 0);
+		m_player[nPos].SetSelected(false);
 	}
 	//
 	//得到最大化CRect
@@ -286,7 +287,7 @@ int CPlayerGroup::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// TODO:  在此添加您专用的创建代码
 	
-	for (int i = 0; i < m_nCount; ++i){
+	for (int i = 0; i < m_nplayWindowCount; ++i){
 		//m_playerGroup.Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, IDC_CUSTOMER + 1);
 		m_player[i].Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0,0,0,0), this, IDC_CUSTOMER + i+1);
 	}
@@ -299,7 +300,7 @@ void CPlayerGroup::OnPaint()
 	CPaintDC dc(this); // device context for painting
 	// TODO:  在此处添加消息处理程序代码
 	// 不为绘图消息调用 CWnd::OnPaint()
-	for (int i = 0; i < m_nCount; ++i){
+	for (int i = 0; i < m_nplayWindowCount; ++i){
 		m_player[i].MoveWindow(m_rcWnd[i]);
 	}
 }
@@ -312,4 +313,49 @@ void CPlayerGroup::OnSize(UINT nType, int cx, int cy)
 	// TODO:  在此处添加消息处理程序代码
 	RecalWndPos();
 
+}
+
+
+// 设置分屏
+void CPlayerGroup::SetScreenCount(int nCount)
+{
+	m_nCount = nCount;
+	//重新分屏
+	RecalWndPos();
+	Invalidate();
+	
+}
+
+
+void CPlayerGroup::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	POINT pt;
+	CRect rect;
+	GetWindowRect(&rect);
+	for (int i = 0; i < m_nCount; ++i){
+		GetCursorPos(&pt);
+		point.x = pt.x - rect.left;
+		point.y = pt.y - rect.top;
+		if (m_rcWnd[i].PtInRect(point)){
+
+			m_player[i].SetSelected(true);
+		}
+		else{
+			m_player[i].SetSelected(false);
+		}
+	}
+	CWnd::OnLButtonDown(nFlags, point);
+}
+
+
+BOOL CPlayerGroup::PreTranslateMessage(MSG* pMsg)
+{
+	// TODO:  在此添加专用代码和/或调用基类
+	if (pMsg->message == WM_LBUTTONDOWN){
+		/*CWnd*pWnd = FromHandle(pMsg->hwnd);
+		::SendMessage(GetParent()->m_hWnd, WM_LBUTTONDOWN, 0, 0);*/
+		return TRUE;
+	}
+	return CWnd::PreTranslateMessage(pMsg);
 }

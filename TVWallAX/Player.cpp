@@ -11,8 +11,12 @@
 IMPLEMENT_DYNAMIC(CPlayer, CWnd)
 
 CPlayer::CPlayer()
+: m_bSelected(false)
 {
 	//RegisterWindowClass();
+	m_edgeColor = RGB(255,255,0);
+	m_edgeSelColor = RGB(255, 0, 0);
+	m_bSelected = false;
 }
 
 CPlayer::~CPlayer()
@@ -24,6 +28,7 @@ BEGIN_MESSAGE_MAP(CPlayer, CWnd)
 	ON_WM_ERASEBKGND()
 	ON_WM_CREATE()
 	ON_WM_PAINT()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -55,11 +60,14 @@ void CPlayer::DrawEdge(CDC* dc)
 	rcWindow.OffsetRect(-rcWindow.TopLeft());
 	rcTemp = rcWindow;
 	//
-	CPen penEdge(PS_SOLID, 1, RGB(255, 255, 0));
+	CPen penEdge(PS_SOLID, 1, m_edgeColor);
 	CPen* cpTemp;
 	cpTemp = dc->SelectObject(&penEdge);
 	rcTemp.DeflateRect(1, 1);
-   	dc->Draw3dRect(rcTemp, RGB(255, 255, 0), RGB(255, 255, 0));
+	if (!m_bSelected)
+		dc->Draw3dRect(rcTemp, m_edgeColor, m_edgeColor);
+	else
+		dc->Draw3dRect(rcTemp, m_edgeSelColor, m_edgeSelColor);
 	dc->SelectObject(cpTemp);
 	
 }
@@ -115,4 +123,32 @@ void CPlayer::OnPaint()
 	if (m_playerItem){
 		m_playerItem.MoveWindow(&rect);
 	}
+}
+
+
+void CPlayer::OnSize(UINT nType, int cx, int cy)
+{
+	CWnd::OnSize(nType, cx, cy);
+
+	// TODO:  在此处添加消息处理程序代码
+}
+
+
+BOOL CPlayer::PreTranslateMessage(MSG* pMsg)
+{
+	// TODO:  在此添加专用代码和/或调用基类
+	// TODO:  在此添加专用代码和/或调用基类
+	if (pMsg->message == WM_LBUTTONDOWN){
+		CWnd*pWnd = FromHandle(pMsg->hwnd);
+		::SendMessage(GetParent()->m_hWnd, WM_LBUTTONDOWN, 0, 0);
+		//return 0;
+	}
+	return CWnd::PreTranslateMessage(pMsg);
+}
+
+
+void CPlayer::SetSelected(bool Selected)
+{
+	m_bSelected = Selected;
+	Invalidate();
 }

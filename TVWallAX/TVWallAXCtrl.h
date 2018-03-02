@@ -46,10 +46,18 @@ protected:
 // 调度和事件 ID
 public:
 	enum {
+		dispidSetScreenNum = 1L
 	};
 	//
 	CPlayerGroup m_playerGroup;
 	
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+
+
+protected:
+	void SetScreenNum(LONG Num);
+public:
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 

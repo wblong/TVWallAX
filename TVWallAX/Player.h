@@ -16,14 +16,26 @@ protected:
 public:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	//BOOL   RegisterWindowClass(HINSTANCE hInstance = NULL);
-	// 绘制边
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnPaint();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+protected:
+	//! 选中状态
+	bool m_bSelected;
+	//! 绘制边框
 	void DrawEdge(CDC* dc);
 	//
 	CRect rcWnd;
 	//
+	//!未选中边框颜色
+	COLORREF m_edgeColor;
+	//!选中边框颜色
+	COLORREF m_edgeSelColor;
+	//!播放控件
 	CPlayerItem m_playerItem;
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnPaint();
+public:
+	void SetSelected(bool Selected);
 };
 
 

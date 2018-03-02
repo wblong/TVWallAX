@@ -21,6 +21,7 @@ library TVWallAXLib
 	{
 		properties:
 		methods:
+			[id(1)] void SetScreenNum(LONG Num);
 	};
 
 	//  CTVWallAXCtrl 的事件调度接口

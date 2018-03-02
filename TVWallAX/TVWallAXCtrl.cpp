@@ -18,11 +18,13 @@ BEGIN_MESSAGE_MAP(CTVWallAXCtrl, COleControl)
 	ON_MESSAGE(OCM_COMMAND, &CTVWallAXCtrl::OnOcmCommand)
 	ON_OLEVERB(AFX_IDS_VERB_PROPERTIES, OnProperties)
 	ON_WM_CREATE()
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // 调度映射
 
 BEGIN_DISPATCH_MAP(CTVWallAXCtrl, COleControl)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "SetScreenNum", dispidSetScreenNum, SetScreenNum, VT_EMPTY, VTS_I4)
 END_DISPATCH_MAP()
 
 // 事件映射
@@ -165,6 +167,7 @@ void CTVWallAXCtrl::OnResetState()
 BOOL CTVWallAXCtrl::PreCreateWindow(CREATESTRUCT& cs)
 {
 	//cs.lpszClass = _T("STATIC");
+	//cs.style = SS_NOTIFY | WS_VISIBLE | WS_CHILD;
 	return COleControl::PreCreateWindow(cs);
 }
 
@@ -199,4 +202,33 @@ int CTVWallAXCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	
 	m_playerGroup.Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0,0,0,0), this, IDC_CUSTOMER + 1);
 	return 0;
+}
+
+
+void CTVWallAXCtrl::SetScreenNum(LONG Num)
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加调度处理程序代码]
+	m_playerGroup.SetScreenCount(Num);
+}
+
+
+void CTVWallAXCtrl::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+
+	COleControl::OnLButtonDown(nFlags, point);
+}
+
+
+BOOL CTVWallAXCtrl::PreTranslateMessage(MSG* pMsg)
+{
+	// TODO:  在此添加专用代码和/或调用基类
+	if (pMsg->message == WM_LBUTTONDOWN){
+		/*CWnd*pWnd = FromHandle(pMsg->hwnd);
+		::SendMessage(GetParent()->m_hWnd, WM_LBUTTONDOWN, 0, 0);*/
+		return 0;
+	}
+	return COleControl::PreTranslateMessage(pMsg);
 }

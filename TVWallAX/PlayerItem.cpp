@@ -22,6 +22,8 @@ CPlayerItem::~CPlayerItem()
 
 BEGIN_MESSAGE_MAP(CPlayerItem, CWnd)
 	ON_WM_ERASEBKGND()
+	ON_WM_SIZE()
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -40,4 +42,31 @@ BOOL CPlayerItem::OnEraseBkgnd(CDC* pDC)
 	pDC->FillSolidRect(&rcWindow,RGB(120,120,120));
 	return true;
 	//return CWnd::OnEraseBkgnd(pDC);
+}
+
+
+void CPlayerItem::OnSize(UINT nType, int cx, int cy)
+{
+	CWnd::OnSize(nType, cx, cy);
+
+	// TODO:  在此处添加消息处理程序代码
+}
+
+
+void CPlayerItem::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	//::SendMessage(GetParent()->m_hWnd, WM_LBUTTONDOWN, 0, 0);
+	CWnd::OnLButtonDown(nFlags, point);
+}
+
+
+BOOL CPlayerItem::PreTranslateMessage(MSG* pMsg)
+{
+	// TODO:  在此添加专用代码和/或调用基类
+	if (pMsg->message == WM_LBUTTONDOWN){
+		CWnd*pWnd = FromHandle(pMsg->hwnd);
+		::SendMessage(GetParent()->m_hWnd, WM_LBUTTONDOWN, 0, 0);
+	}
+	return CWnd::PreTranslateMessage(pMsg);
 }
