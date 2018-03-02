@@ -37,7 +37,7 @@ BOOL CPlayerItem::OnEraseBkgnd(CDC* pDC)
 	CRect rcWindow;
 	GetWindowRect(&rcWindow);
 	rcWindow.OffsetRect(-rcWindow.TopLeft());
-	pDC->FillSolidRect(&rcWindow,RGB(0,0,0));
+	pDC->FillSolidRect(&rcWindow,RGB(120,120,120));
 	return true;
 	//return CWnd::OnEraseBkgnd(pDC);
 }

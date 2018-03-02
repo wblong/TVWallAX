@@ -12,15 +12,20 @@ IMPLEMENT_DYNAMIC(CPlayerGroup, CWnd)
 
 CPlayerGroup::CPlayerGroup()
 {
-
+	m_nCount = 1;
 }
 
 CPlayerGroup::~CPlayerGroup()
 {
+
 }
 
 
 BEGIN_MESSAGE_MAP(CPlayerGroup, CWnd)
+	ON_WM_ERASEBKGND()
+	ON_WM_CREATE()
+	ON_WM_PAINT()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -92,9 +97,7 @@ void CPlayerGroup::RecalWndPos()
 	{
 
 		nWidth = rcWindow.Width() / 4;
-
 		nHeight = rcWindow.Height() / 4;
-
 		m_rcWnd[0] = CRect(0, 0, nWidth * 3, nHeight * 3);
 
 		m_rcWnd[1] = CRect(nWidth * 3, 0, rcWindow.Width(), nHeight);
@@ -263,4 +266,50 @@ void CPlayerGroup::RecalWndPos()
 
 		}
 	}
+}
+
+BOOL CPlayerGroup::OnEraseBkgnd(CDC* pDC)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	CRect rcWindow;
+	GetWindowRect(&rcWindow);
+	rcWindow.OffsetRect(-rcWindow.TopLeft());
+	pDC->FillSolidRect(&rcWindow, RGB(100,100, 100));
+	return TRUE;
+}
+
+
+int CPlayerGroup::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CWnd::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	// TODO:  在此添加您专用的创建代码
+	
+	for (int i = 0; i < m_nCount; ++i){
+		//m_playerGroup.Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, IDC_CUSTOMER + 1);
+		m_player[i].Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0,0,0,0), this, IDC_CUSTOMER + i+1);
+	}
+	return 0;
+}
+
+
+void CPlayerGroup::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+	// TODO:  在此处添加消息处理程序代码
+	// 不为绘图消息调用 CWnd::OnPaint()
+	for (int i = 0; i < m_nCount; ++i){
+		m_player[i].MoveWindow(m_rcWnd[i]);
+	}
+}
+
+
+void CPlayerGroup::OnSize(UINT nType, int cx, int cy)
+{
+	CWnd::OnSize(nType, cx, cy);
+
+	// TODO:  在此处添加消息处理程序代码
+	RecalWndPos();
+
 }

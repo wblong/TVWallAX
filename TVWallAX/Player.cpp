@@ -22,6 +22,8 @@ CPlayer::~CPlayer()
 
 BEGIN_MESSAGE_MAP(CPlayer, CWnd)
 	ON_WM_ERASEBKGND()
+	ON_WM_CREATE()
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -90,3 +92,27 @@ void CPlayer::DrawEdge(CDC* dc)
 //
 //	return TRUE;
 //}
+
+int CPlayer::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CWnd::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	// TODO:  在此添加您专用的创建代码
+	m_playerItem.Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, IDC_CUSTOMER + 1);
+	return 0;
+}
+
+
+void CPlayer::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+	// TODO:  在此处添加消息处理程序代码
+	// 不为绘图消息调用 CWnd::OnPaint()
+	CRect rect;
+	GetClientRect(&rect);
+	rect.DeflateRect(6, 6, 6, 6);
+	if (m_playerItem){
+		m_playerItem.MoveWindow(&rect);
+	}
+}

@@ -113,11 +113,13 @@ void CTVWallAXCtrl::OnDraw(
 	if (!pdc)
 		return;
 
-	pdc->FillSolidRect(rcBounds,RGB(255,255,255));
+	pdc->FillSolidRect(rcBounds,RGB(0,255,255));
 
-	if (m_playerTest)
+	if (m_playerGroup)
 	{
-		m_playerTest.MoveWindow(rcBounds, true);///2
+		CRect rect = rcBounds;
+		rect.DeflateRect(0, 0, 0, 50);
+		m_playerGroup.MoveWindow(rect, true);///2
 	}
 	//DoSuperclassPaint(pdc, rcBounds);
 }
@@ -194,6 +196,7 @@ int CTVWallAXCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	// TODO:  在此添加您专用的创建代码
-	m_playerTest.Create(NULL,_T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 10, 10), this, IDC_CUSTOMER+1);
+	
+	m_playerGroup.Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0,0,0,0), this, IDC_CUSTOMER + 1);
 	return 0;
 }

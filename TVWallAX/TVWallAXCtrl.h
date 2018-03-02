@@ -1,5 +1,5 @@
 #pragma once
-#include"Player.h"
+#include"PlayerGroup.h"
 // TVWallAXCtrl.h : CTVWallAXCtrl ActiveX 控件类的声明。
 
 
@@ -47,7 +47,9 @@ protected:
 public:
 	enum {
 	};
-	CPlayer m_playerTest;
+	//
+	CPlayerGroup m_playerGroup;
+	
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 };
 

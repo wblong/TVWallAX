@@ -1,5 +1,5 @@
 #pragma once
-
+#include"PlayerItem.h"
 
 // CPlayer
 
@@ -20,6 +20,10 @@ public:
 	void DrawEdge(CDC* dc);
 	//
 	CRect rcWnd;
+	//
+	CPlayerItem m_playerItem;
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnPaint();
 };
 
 
