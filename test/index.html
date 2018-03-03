@@ -1,31 +1,30 @@
-<HTML>
-<HEAD>
-<meta charset="utf-8">
-<META NAME="GENERATOR" Content="Microsoft Visual Studio">
-<TITLE>测试</TITLE>
-<script>
-     function SetScreenNum(num) {
-           // console.log(speed);
-           playOCX.SetScreenNum(num);
-        }
-</script>
-</HEAD>
-<BODY>
-
-<div style="width: 70%;height:90%; background: #000;float: left;">
-            <!--codebase="tr_vp.CAB#version=1,0,0,2"-->
-            <object id="playOCX" type="application/x-itst-activex" classid="CLSID:C639E623-F7C2-445E-B889-9D72B467D4F4" style="width: 100%;height: 100%;">
-            </object>
-</div>
-<div style="width: 28%;height: 90%; background: #ccc;float: left;margin-left: 1%;">
-     <select id="screen_num" onchange="SetScreenNum(this.value) ">
-                    <option value="1">+1</option>
-                    <option value="4">+4</option>
-                    <option value="6">+6</option>
-                    <option value="8">+8</option>
-                    <option value="9">+9</option>
-                    <option value="16" selected>+16</option>
-    </select>
-</div>
-</BODY>
-</HTML>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>测试</title>
+	
+</head>
+<body>
+	<div style="width:70%;height:90%; background:#000;float: left;">
+	            <object id="playOCX" type="application/x-itst-activex" classid="CLSID:C639E623-F7C2-445E-B889-9D72B467D4F4" style="width: 100%;height: 100%;">
+	            </object>
+	</div>
+	<div style="width: 28%;height: 90%; background: #ccc;float: left;margin-left: 1%;">
+	     <select id="screen_num" onchange="SetScreenNum(this.value) ">
+	                    <option value="1">+1</option>
+	                    <option value="4">+4</option>
+	                    <option value="6">+6</option>
+	                    <option value="8">+8</option>
+	                    <option value="9">+9</option>
+	                    <option value="16" selected>+16</option>
+	    </select>
+	</div>
+	<script type="text/javascript">
+	     function SetScreenNum(num) {
+	           // console.log(speed);
+	           playOCX.SetScreenNum(num);
+	        }
+	</script>
+</body>
+</html>
