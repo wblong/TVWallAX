@@ -21,6 +21,7 @@ private:
 	CRect m_rcWnd[16];
 	CRect m_rcWndMax;
 	CPlayer m_player[16];
+	int m_nActivePlayer;
 	
 public:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
@@ -32,6 +33,9 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	
+	// НиЭМ
+	void SavePicture();
 };
 
 

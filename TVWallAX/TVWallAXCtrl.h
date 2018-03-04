@@ -67,6 +67,8 @@ public:
 	void OnScreenBtnClicked(UINT uId);
 	//！full screen
 	void OnFullScreenBtnClicked();
+	//! shot
+	void OnScreenShotBtnClicked();
 	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
 	///< 取得显示器宽、高
 	void GetMaxMonitorRect(LPRECT prc);

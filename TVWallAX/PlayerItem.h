@@ -18,6 +18,9 @@ public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	// ½ØÍ¼±£´æ
+	void SavePicture();
+	CString saveFilePath;
 };
 
 

@@ -12,7 +12,7 @@ CPlayerGroup::CPlayerGroup()
 {
 	m_nCount = 16;
 	m_nplayWindowCount = 16;
-
+	m_nActivePlayer = 0;
 }
 
 CPlayerGroup::~CPlayerGroup()
@@ -348,6 +348,7 @@ void CPlayerGroup::OnLButtonDown(UINT nFlags, CPoint point)
 		if (m_rcWnd[i].PtInRect(point)){
 
 			m_player[i].SetSelected(true);
+			m_nActivePlayer = i;
 		}
 		else{
 			m_player[i].SetSelected(false);
@@ -413,4 +414,14 @@ void CPlayerGroup::OnLButtonDblClk(UINT nFlags, CPoint point)
 	}
 	Invalidate();
 	CWnd::OnLButtonDblClk(nFlags, point);
+}
+
+
+// 获取当前激活的PlayerItem
+void CPlayerGroup::SavePicture()
+{
+	if (m_player[m_nActivePlayer].GetSelectedStatus())
+		m_player[m_nActivePlayer].SavePicture();
+	else
+		MessageBox(_T("请单击选择分屏"),_T("提示"));
 }

@@ -45,6 +45,8 @@ public:
 	bool GetMaxSizeStatus();
 	// 设置最大化状态
 	void SetMaxSizeStatus(bool bMaxSize);
+	void SavePicture();
+	bool GetSelectedStatus();
 };
 
 

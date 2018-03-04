@@ -21,6 +21,7 @@ BEGIN_MESSAGE_MAP(CTVWallAXCtrl, COleControl)
 	ON_WM_LBUTTONDOWN()
 	ON_CONTROL_RANGE(BN_CLICKED,IDC_ONESCREEN,IDC_SIXTEENSCREEN,OnScreenBtnClicked)
 	ON_CONTROL(BN_CLICKED,IDC_FULLSCREEN,OnFullScreenBtnClicked)
+	ON_CONTROL(BN_CLICKED,IDC_SCREENSHOT,OnScreenShotBtnClicked)
 	ON_WM_WINDOWPOSCHANGING()
 END_MESSAGE_MAP()
 
@@ -118,8 +119,8 @@ void CTVWallAXCtrl::OnDraw(
 {
 	if (!pdc)
 		return;
-
-	pdc->FillSolidRect(rcBounds,RGB(0,255,255));
+	//±³¾°ÑÕÉ«
+	pdc->FillSolidRect(rcBounds,RGB(0,0,0));
 
 	if (m_playerGroup)
 	{
@@ -129,7 +130,7 @@ void CTVWallAXCtrl::OnDraw(
 		
 		int margin_left = 5, margin_top = 5 , width = 60, height = 40;
 
-		for (int i = 0; i < 7; ++i){
+		for (int i = 0; i < 8; ++i){
 			GetDlgItem(IDC_ONESCREEN+i)->MoveWindow(CRect(rect.left + margin_left*(i+1)+width*i, rect.bottom + margin_top, 
 				rect.left + margin_left * (i + 1) + width* (i+1), rect.bottom + height+margin_top));
 		}
@@ -242,6 +243,8 @@ int CTVWallAXCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CBitmapButton* FullScreen = new CBitmapButton();
 	FullScreen->Create(_T("È«ÆÁ"), dwStyle, CRect(0, 0, 0, 0), this, IDC_FULLSCREEN);
 
+	CBitmapButton* ScreenShot = new CBitmapButton();
+	ScreenShot->Create(_T("½ØÍ¼"), dwStyle, CRect(0, 0, 0, 0), this, IDC_SCREENSHOT);
 	return 0;
 }
 
@@ -374,4 +377,7 @@ int CTVWallAXCtrl::ResetWindowSize()
 	::ShowWindow(hWnd, SW_SHOW);
 	::ShowWindow(hStar, SW_SHOW);
 	return 1;
+}
+void CTVWallAXCtrl::OnScreenShotBtnClicked(){
+	m_playerGroup.SavePicture();
 }

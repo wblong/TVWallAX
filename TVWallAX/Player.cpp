@@ -173,3 +173,15 @@ void CPlayer::SetMaxSizeStatus(bool bMaxSize)
 {
 	m_bIsMaxsize = bMaxSize;
 }
+
+
+void CPlayer::SavePicture()
+{
+	m_playerItem.SavePicture();
+}
+
+
+bool CPlayer::GetSelectedStatus()
+{
+	return m_bSelected;
+}
