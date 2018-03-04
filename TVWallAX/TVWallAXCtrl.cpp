@@ -19,6 +19,7 @@ BEGIN_MESSAGE_MAP(CTVWallAXCtrl, COleControl)
 	ON_OLEVERB(AFX_IDS_VERB_PROPERTIES, OnProperties)
 	ON_WM_CREATE()
 	ON_WM_LBUTTONDOWN()
+	ON_CONTROL_RANGE(BN_CLICKED,IDC_ONESCREEN,IDC_SIXTEENSCREEN,OnScreenBtnClicked)
 END_MESSAGE_MAP()
 
 // 调度映射
@@ -122,10 +123,12 @@ void CTVWallAXCtrl::OnDraw(
 		CRect rect = rcBounds;
 		rect.DeflateRect(0, 0, 0, 50);
 		m_playerGroup.MoveWindow(rect);///2
-		for (UINT i = 0; i < 6; ++i){
-			
-			GetDlgItem(IDC_ONESCREEN+i)->MoveWindow(CRect(rect.left + 2*(i+1)+50*i, rect.bottom + 2, 
-				rect.left + 2 * (i + 1) + 50 * (i+1), rect.bottom + 42));
+		
+		int margin_left = 5, margin_top = 5 , width = 60, height = 40;
+
+		for (int i = 0; i < 6; ++i){
+			GetDlgItem(IDC_ONESCREEN+i)->MoveWindow(CRect(rect.left + margin_left*(i+1)+width*i, rect.bottom + margin_top, 
+				rect.left + margin_left * (i + 1) + width* (i+1), rect.bottom + height+margin_top));
 		}
 		/*GetDlgItem(IDC_ONESCREEN)->MoveWindow(CRect(rect.left+2,rect.bottom+2,rect.left+52,rect.bottom+42));
 		GetDlgItem(IDC_FOURSCREEN)->MoveWindow(CRect(rect.left + 2, rect.bottom + 2, rect.left + 52, rect.bottom + 42));
@@ -215,19 +218,22 @@ int CTVWallAXCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DWORD dwStyle = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
 
 	CBitmapButton* OneScreen = new CBitmapButton();
-	OneScreen->Create(_T("ONE"), dwStyle, CRect(0,0,0,0), this, IDC_FOURSCREEN);
+	OneScreen->Create(_T("一"), dwStyle, CRect(0,0,0,0), this, IDC_ONESCREEN);
 
 	CBitmapButton* FourScreen = new CBitmapButton();
-	FourScreen->Create(_T("FOUR"), dwStyle, CRect(0, 0, 0, 0), this, IDC_SIXSCREEN);
+	FourScreen->Create(_T("四"), dwStyle, CRect(0, 0, 0, 0), this, IDC_FOURSCREEN);
+
+	CBitmapButton* SixScreen = new CBitmapButton();
+	SixScreen->Create(_T("六"), dwStyle, CRect(0, 0, 0, 0), this, IDC_SIXSCREEN);
 
 	CBitmapButton* EightScreen = new CBitmapButton();
-	EightScreen->Create(_T("EIGHT"), dwStyle, CRect(0, 0, 0, 0), this, IDC_EIGHTSCREEN);
+	EightScreen->Create(_T("八"), dwStyle, CRect(0, 0, 0, 0), this, IDC_EIGHTSCREEN);
 
 	CBitmapButton* NineScreen = new CBitmapButton();
-	NineScreen->Create(_T("NINE"), dwStyle, CRect(0, 0, 0, 0), this, IDC_NINESCREEN);
+	NineScreen->Create(_T("九"), dwStyle, CRect(0, 0, 0, 0), this, IDC_NINESCREEN);
 
 	CBitmapButton* SixteenScreen = new CBitmapButton();
-	SixteenScreen->Create(_T("SIXTEEN"), dwStyle, CRect(0, 0, 0, 0), this, IDC_SIXTEENSCREEN);
+	SixteenScreen->Create(_T("十六"), dwStyle, CRect(0, 0, 0, 0), this, IDC_SIXTEENSCREEN);
 
 	return 0;
 }
@@ -259,4 +265,30 @@ BOOL CTVWallAXCtrl::PreTranslateMessage(MSG* pMsg)
 		//return 0;
 	}
 	return COleControl::PreTranslateMessage(pMsg);
+}
+void CTVWallAXCtrl::OnScreenBtnClicked(UINT uId){
+	int Num = 16;
+	switch (uId){
+	case IDC_ONESCREEN:
+		Num = 1;
+		break;
+	case IDC_FOURSCREEN:
+		Num = 4;
+		break;
+	case IDC_SIXSCREEN:
+		Num = 6;
+		break;
+	case IDC_EIGHTSCREEN:
+		Num = 8;
+		break;
+	case IDC_NINESCREEN:
+		Num = 9;
+
+		break;
+	case IDC_SIXTEENSCREEN:
+		Num = 16;
+		break;
+
+	}
+	m_playerGroup.SetScreenCount(Num);
 }
