@@ -20,6 +20,8 @@ BEGIN_MESSAGE_MAP(CTVWallAXCtrl, COleControl)
 	ON_WM_CREATE()
 	ON_WM_LBUTTONDOWN()
 	ON_CONTROL_RANGE(BN_CLICKED,IDC_ONESCREEN,IDC_SIXTEENSCREEN,OnScreenBtnClicked)
+	ON_CONTROL(BN_CLICKED,IDC_FULLSCREEN,OnFullScreenBtnClicked)
+	ON_WM_WINDOWPOSCHANGING()
 END_MESSAGE_MAP()
 
 // 调度映射
@@ -99,6 +101,7 @@ CTVWallAXCtrl::CTVWallAXCtrl()
 {
 	InitializeIIDs(&IID_DTVWallAX, &IID_DTVWallAXEvents);
 	// TODO:  在此初始化控件的实例数据。
+	m_bFullScreenFlag = false;
 }
 
 // CTVWallAXCtrl::~CTVWallAXCtrl - 析构函数
@@ -126,7 +129,7 @@ void CTVWallAXCtrl::OnDraw(
 		
 		int margin_left = 5, margin_top = 5 , width = 60, height = 40;
 
-		for (int i = 0; i < 6; ++i){
+		for (int i = 0; i < 7; ++i){
 			GetDlgItem(IDC_ONESCREEN+i)->MoveWindow(CRect(rect.left + margin_left*(i+1)+width*i, rect.bottom + margin_top, 
 				rect.left + margin_left * (i + 1) + width* (i+1), rect.bottom + height+margin_top));
 		}
@@ -180,8 +183,9 @@ void CTVWallAXCtrl::OnResetState()
 
 BOOL CTVWallAXCtrl::PreCreateWindow(CREATESTRUCT& cs)
 {
-	//cs.lpszClass = _T("STATIC");
-	//cs.style = SS_NOTIFY | WS_VISIBLE | WS_CHILD;
+	cs.lpszClass = _T("STATIC");
+	cs.style = SS_NOTIFY | WS_VISIBLE | WS_CHILD;
+	m_hwndParent = cs.hwndParent;
 	return COleControl::PreCreateWindow(cs);
 }
 
@@ -234,6 +238,9 @@ int CTVWallAXCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	CBitmapButton* SixteenScreen = new CBitmapButton();
 	SixteenScreen->Create(_T("十六"), dwStyle, CRect(0, 0, 0, 0), this, IDC_SIXTEENSCREEN);
+
+	CBitmapButton* FullScreen = new CBitmapButton();
+	FullScreen->Create(_T("全屏"), dwStyle, CRect(0, 0, 0, 0), this, IDC_FULLSCREEN);
 
 	return 0;
 }
@@ -291,4 +298,80 @@ void CTVWallAXCtrl::OnScreenBtnClicked(UINT uId){
 
 	}
 	m_playerGroup.SetScreenCount(Num);
+}
+void CTVWallAXCtrl::OnFullScreenBtnClicked(){
+	
+	m_bFullScreenFlag = !m_bFullScreenFlag;
+	if (m_bFullScreenFlag)
+	{
+		MaxiumWindow();
+	}
+	else
+	{
+		ResetWindowSize();
+	}
+}
+
+void CTVWallAXCtrl::OnWindowPosChanging(WINDOWPOS* lpwndpos)
+{
+
+	if (::GetParent(m_hWnd) != m_hwndParent)
+	{
+		CRect rc;
+		GetMaxMonitorRect(&rc);
+		lpwndpos->cx = rc.Width();
+		lpwndpos->cy = rc.Height();
+		lpwndpos->x = rc.left;
+		lpwndpos->y = rc.top;
+	}
+	COleControl::OnWindowPosChanging(lpwndpos);
+
+	// TODO:  在此处添加消息处理程序代码
+
+}
+///< 取得显示器宽、高  
+void CTVWallAXCtrl::GetMaxMonitorRect(LPRECT prc)
+{
+	HMONITOR hMonitor;
+	MONITORINFOEX mi;
+	RECT rc;
+	hMonitor = MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST);
+	mi.cbSize = sizeof(mi);
+	GetMonitorInfo(hMonitor, &mi);
+	rc = mi.rcMonitor;
+	*prc = rc;
+}
+///< 最大化窗口  
+int CTVWallAXCtrl::MaxiumWindow()
+{
+	HWND hwnd = GetSafeHwnd();
+	RECT rc;
+	// 取得显示器的宽、高  
+	GetMaxMonitorRect(&rc);
+	// 计算画面宽、高  
+	int nWidth = rc.right - rc.left;
+	int nHeight = rc.bottom - rc.top;
+	// 取得原始位置并保存  
+	m_wpPrev.length = sizeof(WINDOWPLACEMENT);
+	::GetWindowPlacement(m_hWnd, &m_wpPrev);
+	// 窗口全屏  
+	SetParent(NULL);
+	DWORD dwFlag = SWP_DRAWFRAME;
+	BOOL bSucceed = ::SetWindowPos(m_hWnd, HWND_TOPMOST, rc.left, rc.top, nWidth, nHeight, dwFlag);
+	return 1;
+}
+///< 恢复窗口  
+int CTVWallAXCtrl::ResetWindowSize()
+{
+	if (NULL != m_hwndParent)
+	{
+		::SetParent(m_hWnd, m_hwndParent);
+		m_wpPrev.flags = SW_SHOWMAXIMIZED;
+		::SetWindowPlacement(m_hWnd, &m_wpPrev);
+	}
+	HWND hWnd = ::FindWindow(_T("Shell_TrayWnd"), NULL);
+	HWND hStar = ::FindWindow(_T("Button"), NULL);
+	::ShowWindow(hWnd, SW_SHOW);
+	::ShowWindow(hStar, SW_SHOW);
+	return 1;
 }

@@ -56,10 +56,23 @@ public:
 
 protected:
 	void SetScreenNum(LONG Num);
+	//---- window fullscreen and normal
+	BOOL m_bFullScreenFlag;
+	WINDOWPLACEMENT m_wpPrev;
+	HWND m_hwndParent;
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	//!分屏响应函数
 	void OnScreenBtnClicked(UINT uId);
+	//！full screen
+	void OnFullScreenBtnClicked();
+	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
+	///< 取得显示器宽、高
+	void GetMaxMonitorRect(LPRECT prc);
+	///< 最大化窗口
+	int MaxiumWindow();
+	///< 恢复窗口
+	int ResetWindowSize();
 };
 
