@@ -35,6 +35,7 @@ library TVWallAXLib
 			//  事件接口没有任何属性
 
 		methods:
+			[id(1)] void calljs(SHORT param);
 	};
 
 	//  CTVWallAXCtrl 的类信息

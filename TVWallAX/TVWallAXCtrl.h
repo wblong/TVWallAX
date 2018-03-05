@@ -46,6 +46,7 @@ protected:
 // 调度和事件 ID
 public:
 	enum {
+		eventidcalljs = 1L,
 		dispidSetScreenNum = 1L
 	};
 	//
@@ -61,6 +62,9 @@ protected:
 	WINDOWPLACEMENT m_wpPrev;
 	HWND m_hwndParent;
 public:
+	//测试事件处理函数
+	LRESULT OnFireEventForThread(WPARAM wParam, LPARAM lParam);
+
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	//!分屏响应函数
@@ -76,5 +80,16 @@ public:
 	int MaxiumWindow();
 	///< 恢复窗口
 	int ResetWindowSize();
+	// 测试函数
+	void Invoke(short a);
+public:
+	// 测试变量
+	int m_a;
+protected:
+	//javascript 事件处理代码
+	void calljs(SHORT param)
+	{
+		FireEvent(eventidcalljs, EVENT_PARAM(VTS_I2), param);
+	}
 };
 

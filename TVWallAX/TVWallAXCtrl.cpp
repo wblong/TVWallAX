@@ -6,6 +6,8 @@
 #include "TVWallAXPropPage.h"
 #include "afxdialogex.h"
 
+#define WM_THREADFIREEVENT WM_APP+101
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -23,6 +25,7 @@ BEGIN_MESSAGE_MAP(CTVWallAXCtrl, COleControl)
 	ON_CONTROL(BN_CLICKED,IDC_FULLSCREEN,OnFullScreenBtnClicked)
 	ON_CONTROL(BN_CLICKED,IDC_SCREENSHOT,OnScreenShotBtnClicked)
 	ON_WM_WINDOWPOSCHANGING()
+	ON_MESSAGE(WM_THREADFIREEVENT,OnFireEventForThread)
 END_MESSAGE_MAP()
 
 // 调度映射
@@ -34,6 +37,7 @@ END_DISPATCH_MAP()
 // 事件映射
 
 BEGIN_EVENT_MAP(CTVWallAXCtrl, COleControl)
+	EVENT_CUSTOM_ID("calljs", eventidcalljs, calljs, VTS_I2)
 END_EVENT_MAP()
 
 // 属性页
@@ -99,6 +103,7 @@ BOOL CTVWallAXCtrl::CTVWallAXCtrlFactory::UpdateRegistry(BOOL bRegister)
 // CTVWallAXCtrl::CTVWallAXCtrl - 构造函数
 
 CTVWallAXCtrl::CTVWallAXCtrl()
+	: m_a(0)
 {
 	InitializeIIDs(&IID_DTVWallAX, &IID_DTVWallAXEvents);
 	// TODO:  在此初始化控件的实例数据。
@@ -128,11 +133,12 @@ void CTVWallAXCtrl::OnDraw(
 		rect.DeflateRect(0, 0, 0, 50);
 		m_playerGroup.MoveWindow(rect);///2
 		
-		int margin_left = 5, margin_top = 5 , width = 60, height = 40;
+		int margin_left = 5, margin_top = 5 , width = 40, height = 40;
 
 		for (int i = 0; i < 8; ++i){
+
 			GetDlgItem(IDC_ONESCREEN+i)->MoveWindow(CRect(rect.left + margin_left*(i+1)+width*i, rect.bottom + margin_top, 
-				rect.left + margin_left * (i + 1) + width* (i+1), rect.bottom + height+margin_top));
+				rect.left + margin_left * (i + 1) + width* (i+1), rect.bottom + height+margin_top-2));
 		}
 		/*GetDlgItem(IDC_ONESCREEN)->MoveWindow(CRect(rect.left+2,rect.bottom+2,rect.left+52,rect.bottom+42));
 		GetDlgItem(IDC_FOURSCREEN)->MoveWindow(CRect(rect.left + 2, rect.bottom + 2, rect.left + 52, rect.bottom + 42));
@@ -261,7 +267,8 @@ void CTVWallAXCtrl::SetScreenNum(LONG Num)
 void CTVWallAXCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO:  在此添加消息处理程序代码和/或调用默认值
-
+	//触发并调用客户端js代码
+	Invoke(1);
 	COleControl::OnLButtonDown(nFlags, point);
 }
 
@@ -380,4 +387,25 @@ int CTVWallAXCtrl::ResetWindowSize()
 }
 void CTVWallAXCtrl::OnScreenShotBtnClicked(){
 	m_playerGroup.SavePicture();
+}
+//
+void f(void*r){
+
+	CTVWallAXCtrl*p = (CTVWallAXCtrl*)r;
+	Sleep(5000);
+	p->m_a += 10;
+	PostMessage(p->m_hWnd, WM_THREADFIREEVENT, (WPARAM)NULL, (LPARAM)NULL);
+	return;
+}
+// 测试函数
+void CTVWallAXCtrl::Invoke(short a)
+{
+	m_a = a;
+	_beginthread(f, 0, (void*)this);
+}
+//测试事件处理函数
+LRESULT CTVWallAXCtrl::OnFireEventForThread(WPARAM wParam, LPARAM lParam)
+{
+	this->calljs(m_a);
+	return TRUE;
 }
