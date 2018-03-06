@@ -36,6 +36,7 @@ library TVWallAXLib
 			[id(13)] BSTR GetCameraList();
 			[id(14)] LONG StartRealPlay(BSTR cameraId);
 			[id(15)] LONG StopRealPlay();
+			[id(16)] LONG StartLocalRecord();
 	};
 
 	//  CTVWallAXCtrl 的事件调度接口

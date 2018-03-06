@@ -25,6 +25,7 @@ BEGIN_MESSAGE_MAP(CTVWallAXCtrl, COleControl)
 	ON_CONTROL_RANGE(BN_CLICKED,IDC_ONESCREEN,IDC_SIXTEENSCREEN,OnScreenBtnClicked)
 	ON_CONTROL(BN_CLICKED,IDC_FULLSCREEN,OnFullScreenBtnClicked)
 	ON_CONTROL(BN_CLICKED,IDC_SCREENSHOT,OnScreenShotBtnClicked)
+	ON_CONTROL(BN_CLICKED,IDC_VIDEORECORD,OnVideoRecordBtnClicked)
 	ON_WM_WINDOWPOSCHANGING()
 END_MESSAGE_MAP()
 
@@ -46,6 +47,7 @@ BEGIN_DISPATCH_MAP(CTVWallAXCtrl, COleControl)
 	DISP_FUNCTION_ID(CTVWallAXCtrl, "GetCameraList", dispidGetCameraList, GetCameraList, VT_BSTR, VTS_NONE)
 	DISP_FUNCTION_ID(CTVWallAXCtrl, "StartRealPlay", dispidStartRealPlay, StartRealPlay, VT_I4, VTS_BSTR)
 	DISP_FUNCTION_ID(CTVWallAXCtrl, "StopRealPlay", dispidStopRealPlay, StopRealPlay, VT_I4, VTS_NONE)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "StartLocalRecord", dispidStartLocalRecord, StartLocalRecord, VT_I4, VTS_NONE)
 END_DISPATCH_MAP()
 
 // 事件映射
@@ -148,7 +150,7 @@ void CTVWallAXCtrl::OnDraw(
 		
 		int margin_left = 5, margin_top = 5 , width = 40, height = 40;
 
-		for (int i = 0; i < 8; ++i){
+		for (int i = 0; i < 9; ++i){
 			GetDlgItem(IDC_ONESCREEN+i)->MoveWindow(CRect(rect.left + margin_left*(i+1)+width*i, rect.bottom + margin_top, 
 				rect.left + margin_left * (i + 1) + width* (i+1), rect.bottom + height+margin_top-2));
 		}
@@ -263,6 +265,10 @@ int CTVWallAXCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	CBitmapButton* ScreenShot = new CBitmapButton();
 	ScreenShot->Create(_T("截图"), dwStyle, CRect(0, 0, 0, 0), this, IDC_SCREENSHOT);
+
+	CBitmapButton* VideoRecord = new CBitmapButton();
+	VideoRecord->Create(_T("录像"), dwStyle, CRect(0, 0, 0, 0), this, IDC_VIDEORECORD);
+
 	return 0;
 }
 
@@ -399,7 +405,10 @@ int CTVWallAXCtrl::ResetWindowSize()
 void CTVWallAXCtrl::OnScreenShotBtnClicked(){
 	m_playerGroup.SavePicture();
 }
+void CTVWallAXCtrl::OnVideoRecordBtnClicked(){
 
+	m_playerGroup.StartLocalRecord();
+}
 LONG CTVWallAXCtrl::Init()
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -615,4 +624,14 @@ LONG CTVWallAXCtrl::StopRealPlay()
 	// TODO:  在此添加调度处理程序代码
 	if (m_nConnectionID>0)
 		return m_playerGroup.StopRealPlay();
+}
+
+
+LONG CTVWallAXCtrl::StartLocalRecord()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加调度处理程序代码
+	if (m_nConnectionID > 0)
+		return m_playerGroup.StartLocalRecord();
 }

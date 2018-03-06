@@ -46,6 +46,7 @@ protected:
 // 调度和事件 ID
 public:
 	enum {
+		dispidStartLocalRecord = 16L,
 		dispidStopRealPlay = 15L,
 		dispidStartRealPlay = 14L,
 		dispidGetCameraList = 13L,
@@ -83,6 +84,9 @@ public:
 	void OnFullScreenBtnClicked();
 	//! shot
 	void OnScreenShotBtnClicked();
+	//!videoRecord
+	void OnVideoRecordBtnClicked();
+	//!
 	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
 	///< 取得显示器宽、高
 	void GetMaxMonitorRect(LPRECT prc);
@@ -112,5 +116,6 @@ protected:
 	BSTR GetCameraList();
 	LONG StartRealPlay(LPCTSTR cameraId);
 	LONG StopRealPlay();
+	LONG StartLocalRecord();
 };
 

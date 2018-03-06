@@ -449,3 +449,17 @@ long CPlayerGroup::StopRealPlay()
 	}
 	return -1;
 }
+
+
+// 录像
+long CPlayerGroup::StartLocalRecord()
+{
+	//可以在playeritem中判断
+	if (m_player[m_nActivePlayer].GetSelectedStatus())
+		return m_player[m_nActivePlayer].StartLocalRecord();
+	else
+	{
+		MessageBox(_T("请单击选择分屏"), _T("提示"));
+	}
+	return -1;
+}

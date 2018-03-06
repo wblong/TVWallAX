@@ -141,6 +141,7 @@ IMPLEMENT_DYNAMIC(CPlayerItem, CWnd)
 CPlayerItem::CPlayerItem()
 : m_nSessionID(-1)
 , m_strCameraID(_T(""))
+, m_bVideoStart(false)
 {
 	saveFilePath = _T("C:\\Capture\\");
 }
@@ -303,4 +304,53 @@ long CPlayerItem::StopRealPlay()
 			return -1;
 		}
 	}
+}
+
+
+// 开始本地录像
+long CPlayerItem::StartLocalRecord()
+{
+	CString path = "C:\\VideoCapture\\";
+
+	if (!PathIsDirectory(path)){
+		CreateDirectory(path, NULL);
+	}
+	// TODO: 在此添加调度处理程序代码
+
+	if (!m_bVideoStart){
+
+		if (m_nSessionID>-1){
+			SYSTEMTIME tmSys;
+			GetLocalTime(&tmSys);
+			CTime tm3(tmSys);
+			__int64 tmDst = __int64(tm3.GetTime()) * 1000 + tmSys.wMilliseconds;
+			CString sMS;
+			_i64toa(tmDst, sMS.GetBuffer(100), 10);
+			sMS.ReleaseBuffer();
+			if (TCSResult::Success == TCS_StartLocalRecord(m_nSessionID, path + sMS + ".avi")){
+				MessageBox("开始录像!", "提示");
+				m_bVideoStart = true;
+			}
+			else{
+				MessageBox("录像失败!", "提示");
+				return -1;
+			}
+
+		}
+	}
+	else{
+		if (m_nSessionID>-1){
+
+			if (TCSResult::Success == TCS_StopLocalRecord(m_nSessionID)){
+				MessageBox("录像结束!", "提示");
+				m_bVideoStart = false;
+			}
+			else{
+				MessageBox("录像结束失败!", "提示");
+				return -1;
+			}
+
+		}
+	}
+	return 1;
 }

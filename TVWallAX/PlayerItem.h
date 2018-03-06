@@ -29,6 +29,10 @@ public:
 	CString m_strCameraID;
 	// 停止实时播放
 	long StopRealPlay();
+	// 开始本地录像
+	long StartLocalRecord();
+	// 录像状态
+	bool m_bVideoStart;
 };
 
 

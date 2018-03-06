@@ -40,6 +40,8 @@ public:
 	long StartRealPlay(long connectionID, CString cameraId);
 	// Í£Ö¹ÊµÊ±¼à¿Ø
 	long StopRealPlay();
+	// Â¼Ïñ
+	long StartLocalRecord();
 };
 
 

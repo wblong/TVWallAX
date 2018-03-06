@@ -199,3 +199,10 @@ long CPlayer::StopRealPlay()
 {
 	return m_playerItem.StopRealPlay();
 }
+
+
+// Â¼Ïñ¹¦ÄÜ
+long CPlayer::StartLocalRecord()
+{
+	return m_playerItem.StartLocalRecord();
+}

@@ -51,6 +51,8 @@ public:
 	long StartRealPlay(long connectionID, CString cameraId);
 	// 停止实时播放
 	long StopRealPlay();
+	// 录像功能
+	long StartLocalRecord();
 };
 
 
