@@ -20,10 +20,10 @@
                 <legend>登录</legend>
                 <div >
                      <lable>IP&Port:&nbsp;</lable>
-                     <input type="text"   id="ip" value="192.168.5.242:8000">
+                     <input type="text"  id="ip" value="192.168.5.242:8000">
                 </div>
                <div >
-                       <lable>用户名:&nbsp;&nbsp;&nbsp;</lable>
+                       <lable>用户名:&nbsp;&nbsp;</lable>
                        <input type="text" id="username" value="admin">
                </div>
                <div >
@@ -47,7 +47,7 @@
                 <input type="text"   id="cameraId" value="294">
                 <input type="button"  onclick="queryCameras()" value="查询相机">
                 <input type="button" id="btn_playreal" onclick="play()" value="播放">
-                <!-- <button id="btn_pause" class="pure-button pure-button-primary pure-button-disabled" onclick="onPauseClicked(this)">暂停</button> -->
+                <input type="button" id="btn_stopplayreal" onclick="stopPlay()" value="停止播放">
             </fieldset>
           </form>
     </div>
@@ -109,6 +109,14 @@
             var cameraId=$("#cameraId").val();
             var playResult = playOCX.StartRealPlay(cameraId);
             //alert(playResult);
+            return false;
+        }
+        //停止播放
+        function stopPlay() {
+            var playResult = playOCX.StopRealPlay();
+            if (playResult >-1) {
+                return true;
+            }
             return false;
         }
 	</script>

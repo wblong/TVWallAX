@@ -27,6 +27,8 @@ public:
 	long m_nSessionID;
 	// 相机ID
 	CString m_strCameraID;
+	// 停止实时播放
+	long StopRealPlay();
 };
 
 

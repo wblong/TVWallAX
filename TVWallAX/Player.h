@@ -49,6 +49,8 @@ public:
 	bool GetSelectedStatus();
 	// 播放实时视屏
 	long StartRealPlay(long connectionID, CString cameraId);
+	// 停止实时播放
+	long StopRealPlay();
 };
 
 

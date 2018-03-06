@@ -599,8 +599,6 @@ LONG CTVWallAXCtrl::StartRealPlay(LPCTSTR cameraId)
 	// TODO:  在此添加调度处理程序代码
 	if (m_nConnectionID > 0){
 		CString str((LPCTSTR)cameraId);
-		
-
 		return  m_playerGroup.StartRealPlay(m_nConnectionID, cameraId);
 	}
 	else{
@@ -615,6 +613,6 @@ LONG CTVWallAXCtrl::StopRealPlay()
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	// TODO:  在此添加调度处理程序代码
-	
-	return 0;
+	if (m_nConnectionID>0)
+		return m_playerGroup.StopRealPlay();
 }

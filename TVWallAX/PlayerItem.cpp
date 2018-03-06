@@ -289,3 +289,18 @@ long CPlayerItem::StartRealPlay(long connectionId, CString cameraId)
 	}
 	return m_nSessionID;
 }
+
+
+// Í£Ö¹ÊµÊ±²¥·Å
+long CPlayerItem::StopRealPlay()
+{
+	if (m_nSessionID > -1){
+
+		if (TCSResult::Success == TCS_StopRealPlay(m_nSessionID)){
+			return 1;
+		}
+		else{
+			return -1;
+		}
+	}
+}

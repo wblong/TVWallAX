@@ -437,3 +437,15 @@ long CPlayerGroup::StartRealPlay(long connectionID, CString cameraId)
 	}
 	return -1;
 }
+
+
+// 停止实时监控
+long CPlayerGroup::StopRealPlay()
+{
+	if (m_player[m_nActivePlayer].GetSelectedStatus())
+		return m_player[m_nActivePlayer].StopRealPlay();
+	else{
+		MessageBox(_T("请单击选择分屏"), _T("提示"));
+	}
+	return -1;
+}

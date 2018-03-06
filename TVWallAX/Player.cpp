@@ -192,3 +192,10 @@ long CPlayer::StartRealPlay(long connectionID, CString cameraId)
 {
 	return m_playerItem.StartRealPlay(connectionID,cameraId);
 }
+
+
+// Í£Ö¹ÊµÊ±²¥·Å
+long CPlayer::StopRealPlay()
+{
+	return m_playerItem.StopRealPlay();
+}

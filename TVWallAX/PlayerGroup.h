@@ -38,6 +38,8 @@ public:
 	void SavePicture();
 	// 播放实时视频
 	long StartRealPlay(long connectionID, CString cameraId);
+	// 停止实时监控
+	long StopRealPlay();
 };
 
 
