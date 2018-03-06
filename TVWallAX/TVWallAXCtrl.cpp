@@ -5,6 +5,9 @@
 #include "TVWallAXCtrl.h"
 #include "TVWallAXPropPage.h"
 #include "afxdialogex.h"
+#include "TCS_CommonData.h"
+#include "TCS_Functions.h"
+#include "Json.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -29,6 +32,20 @@ END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CTVWallAXCtrl, COleControl)
 	DISP_FUNCTION_ID(CTVWallAXCtrl, "SetScreenNum", dispidSetScreenNum, SetScreenNum, VT_EMPTY, VTS_I4)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "Init", dispidInit, Init, VT_I4, VTS_NONE)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "UnInit", dispidUnInit, UnInit, VT_I4, VTS_NONE)
+	DISP_PROPERTY_NOTIFY_ID(CTVWallAXCtrl, "IP", dispidIP, m_strIP, OnIPChanged, VT_BSTR)
+	DISP_PROPERTY_NOTIFY_ID(CTVWallAXCtrl, "UserName", dispidUserName, m_strUserName, OnUserNameChanged, VT_BSTR)
+	DISP_PROPERTY_NOTIFY_ID(CTVWallAXCtrl, "PassWd", dispidPassWd, m_strPassWd, OnPassWdChanged, VT_BSTR)
+	DISP_PROPERTY_NOTIFY_ID(CTVWallAXCtrl, "Port", dispidPort, m_nPort, OnPortChanged, VT_I4)
+	DISP_PROPERTY_NOTIFY_ID(CTVWallAXCtrl, "SocketType", dispidSocketType, m_nSocketType, OnSocketTypeChanged, VT_I4)
+	DISP_PROPERTY_NOTIFY_ID(CTVWallAXCtrl, "PlatformID", dispidPlatformID, m_nPlatformID, OnPlatformIDChanged, VT_I4)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "Login", dispidLogin, Login, VT_I4, VTS_NONE)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "Logout", dispidLogout, Logout, VT_I4, VTS_NONE)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "GetSupportedPlatform", dispidGetSupportedPlatform, GetSupportedPlatform, VT_BSTR, VTS_NONE)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "GetCameraList", dispidGetCameraList, GetCameraList, VT_BSTR, VTS_NONE)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "StartRealPlay", dispidStartRealPlay, StartRealPlay, VT_I4, VTS_BSTR)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "StopRealPlay", dispidStopRealPlay, StopRealPlay, VT_I4, VTS_NONE)
 END_DISPATCH_MAP()
 
 // 事件映射
@@ -103,6 +120,7 @@ CTVWallAXCtrl::CTVWallAXCtrl()
 	InitializeIIDs(&IID_DTVWallAX, &IID_DTVWallAXEvents);
 	// TODO:  在此初始化控件的实例数据。
 	m_bFullScreenFlag = false;
+	m_nConnectionID = -1;
 }
 
 // CTVWallAXCtrl::~CTVWallAXCtrl - 析构函数
@@ -380,4 +398,223 @@ int CTVWallAXCtrl::ResetWindowSize()
 }
 void CTVWallAXCtrl::OnScreenShotBtnClicked(){
 	m_playerGroup.SavePicture();
+}
+
+LONG CTVWallAXCtrl::Init()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加调度处理程序代码
+	if (TCSResult::Failed == TCS_Init()){
+
+		MessageBox(_T("初始化失败！"),_T("提示"));
+		return -1;
+	}
+	else{
+		//MessageBox("初始化成功！");
+		return 1;
+	}
+}
+LONG CTVWallAXCtrl::UnInit(void)
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO: 在此添加调度处理程序代码
+
+	if (TCSResult::Failed != TCS_UnInit()){
+
+		return 1;
+	}
+	else{
+		MessageBox(_T("反初始化失败！"), _T("提示"));
+		return -1;
+	}
+}
+
+void CTVWallAXCtrl::OnIPChanged()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加属性处理程序代码
+
+	SetModifiedFlag();
+}
+
+
+void CTVWallAXCtrl::OnUserNameChanged()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加属性处理程序代码
+
+	SetModifiedFlag();
+}
+
+
+void CTVWallAXCtrl::OnPassWdChanged()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加属性处理程序代码
+
+	SetModifiedFlag();
+}
+
+
+void CTVWallAXCtrl::OnPortChanged()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加属性处理程序代码
+
+	SetModifiedFlag();
+}
+
+
+void CTVWallAXCtrl::OnSocketTypeChanged()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加属性处理程序代码
+
+	SetModifiedFlag();
+}
+
+
+void CTVWallAXCtrl::OnPlatformIDChanged()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加属性处理程序代码
+
+	SetModifiedFlag();
+}
+
+
+LONG CTVWallAXCtrl::Login()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加调度处理程序代码
+	LOGININFO loginInfo;
+	loginInfo.ip = m_strIP;
+	loginInfo.port = m_nPort;
+	loginInfo.username = m_strUserName;
+	loginInfo.password = m_strPassWd;
+	loginInfo.st = m_nSocketType == 0 ? TCS_UDP : TCS_TCP;
+	m_nConnectionID = TCS_Login(m_nPlatformID, &loginInfo);
+	if (TCSResult::Failed != m_nConnectionID){
+		return m_nConnectionID;
+	}
+	else{
+		return -1;
+	}
+}
+LONG CTVWallAXCtrl::Logout()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加调度处理程序代码
+	if (m_nConnectionID > -1){
+		if (TCSResult::Failed == TCS_Logout(m_nConnectionID)){
+			return -1;
+		}
+		else{
+			m_nConnectionID = -1;
+			return 1;
+		}
+
+	}
+	return 0;
+}
+
+
+BSTR CTVWallAXCtrl::GetSupportedPlatform()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	CString strResult;
+
+	// TODO:  在此添加调度处理程序代码
+	PlatformInfoSet platformInfoSet = TCS_GetSupportedPlatform();
+	int count = platformInfoSet.cnt;
+	Json::Value root;			//json根节点
+	Json::Value v1;				//json子节点
+	Json::FastWriter writer;	//封装串
+	for (int i = 0; i < count; ++i){
+		PlatformInfo info = platformInfoSet.infos[i];
+		CString id;
+		id.Format(_T("%d"), info.id);
+		v1[_T("id")] = id.GetBuffer(0);
+		v1[_T("description")] = info.description;
+		root[id] = v1;
+	}
+	strResult = writer.write(root).c_str();
+	return strResult.AllocSysString();
+}
+
+
+BSTR CTVWallAXCtrl::GetCameraList()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	CString strResult;
+
+	// TODO:  在此添加调度处理程序代码
+	if (m_nConnectionID > -1){
+		//获取相机数目
+		int count = TCS_GetCameraAmount(m_nConnectionID);
+		CameraInfo* pCameras = new CameraInfo[count];
+		//获取相机List
+		if (TCSResult::Success == TCS_GetCameraList(m_nConnectionID, pCameras, count)){
+
+			Json::Value root;			//json根节点
+			Json::Value v1;				//json子节点
+			Json::FastWriter writer;	//封装串
+			for (int i = 0; i < count; ++i){
+				CString id = pCameras[i].cameraId;
+				v1["cameraId"] = id.GetBuffer(0);
+				v1["name"] = pCameras[i].name;
+				v1["ip"] = pCameras[i].ip;
+				v1["firm"] = pCameras[i].firm;
+				v1["model"] = pCameras[i].model;
+				v1["enabled"] = pCameras[i].enabled;
+				v1["bPTZ"] = pCameras[i].bPTZ;
+				root[id] = v1;
+			}
+
+			strResult = writer.write(root).c_str();		//将封装的json串转成char类型
+
+		}
+		delete[]pCameras;
+	}
+	return strResult.AllocSysString();
+}
+
+
+LONG CTVWallAXCtrl::StartRealPlay(LPCTSTR cameraId)
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加调度处理程序代码
+	if (m_nConnectionID > 0){
+		CString str((LPCTSTR)cameraId);
+		
+
+		return  m_playerGroup.StartRealPlay(m_nConnectionID, cameraId);
+	}
+	else{
+		return -1;
+	}
+	
+}
+
+
+LONG CTVWallAXCtrl::StopRealPlay()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加调度处理程序代码
+	
+	return 0;
 }

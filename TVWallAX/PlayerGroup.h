@@ -36,6 +36,8 @@ public:
 	
 	// 截图
 	void SavePicture();
+	// 播放实时视频
+	long StartRealPlay(long connectionID, CString cameraId);
 };
 
 

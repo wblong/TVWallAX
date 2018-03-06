@@ -21,6 +21,12 @@ public:
 	// 截图保存
 	void SavePicture();
 	CString saveFilePath;
+	// 播放实时视频
+	long StartRealPlay(long connectionId, CString cameraId);
+	// 当前会话
+	long m_nSessionID;
+	// 相机ID
+	CString m_strCameraID;
 };
 
 

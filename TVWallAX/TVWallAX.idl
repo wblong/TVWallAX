@@ -20,8 +20,22 @@ library TVWallAXLib
 	dispinterface _DTVWallAX
 	{
 		properties:
-		methods:
+			[id(4)] BSTR IP;
+			[id(5)] BSTR UserName;
+			[id(6)] BSTR PassWd;
+			[id(7)] LONG Port;
+			[id(8)] LONG SocketType;
+			[id(9)] LONG PlatformID;
+	methods:
 			[id(1)] void SetScreenNum(LONG Num);
+			[id(2)] LONG Init();
+			[id(3)] LONG UnInit();
+			[id(10)] LONG Login();
+			[id(11)] LONG Logout();
+			[id(12)] BSTR GetSupportedPlatform();
+			[id(13)] BSTR GetCameraList();
+			[id(14)] LONG StartRealPlay(BSTR cameraId);
+			[id(15)] LONG StopRealPlay();
 	};
 
 	//  CTVWallAXCtrl 的事件调度接口

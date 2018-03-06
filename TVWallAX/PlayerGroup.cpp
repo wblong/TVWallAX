@@ -425,3 +425,15 @@ void CPlayerGroup::SavePicture()
 	else
 		MessageBox(_T("请单击选择分屏"),_T("提示"));
 }
+
+
+// 播放实时视频
+long CPlayerGroup::StartRealPlay(long connectionID, CString cameraId)
+{
+	if (m_player[m_nActivePlayer].GetSelectedStatus())
+		return m_player[m_nActivePlayer].StartRealPlay(connectionID, cameraId);
+	else{
+		MessageBox(_T("请单击选择分屏"), _T("提示"));
+	}
+	return -1;
+}

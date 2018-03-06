@@ -3,28 +3,114 @@
 <head>
 	<meta charset="utf-8">
 	<title>测试</title>
-	
+    <script src="js/jquery-1.12.4.min.js"></script>
 </head>
 <body>
-	<div style="width:700px;height:500px; background:#000;float: left;">
+	<div style="width:800px;height:500px; background:#000;float: left;">
 	            <object id="playOCX" type="application/x-itst-activex" classid="CLSID:C639E623-F7C2-445E-B889-9D72B467D4F4" style="width: 100%;height: 100%;">
+                <param name="_Version " value="65536" />
+                <param name="_ExtentX " value="22357" />
+                <param name="_ExtentY " value="16589" />
+                <param name="_StockProps " value="0" />
 	            </object>
 	</div>
-	<div style="width: 200px;height: 500px; background: #ccc;float: left;margin-left: 20px;">
-	     <select id="screen_num" onchange="SetScreenNum(this.value) ">
-	                    <option value="1">+1</option>
-	                    <option value="4">+4</option>
-	                    <option value="6">+6</option>
-	                    <option value="8">+8</option>
-	                    <option value="9">+9</option>
-	                    <option value="16" selected>+16</option>
-	    </select>
-	</div>
-	<script type="text/javascript">
-	     function SetScreenNum(num) {
-	           // console.log(speed);
-	           playOCX.SetScreenNum(num);
-	        }
+    <div style="width:300px;height: 500px; background: #ccc;float: left;margin-left: 10px">
+         <form >
+            <fieldset>
+                <legend>登录</legend>
+                <div >
+                     <lable>IP&Port:&nbsp;</lable>
+                     <input type="text"   id="ip" value="192.168.5.242:8000">
+                </div>
+               <div >
+                       <lable>用户名:&nbsp;&nbsp;&nbsp;</lable>
+                       <input type="text" id="username" value="admin">
+               </div>
+               <div >
+                <lable>密 码: &nbsp;&nbsp;&nbsp;&nbsp;</lable>
+                <input type="password" id="passwd">
+                </div>
+                <div >
+                  <lable>平台ID:&nbsp;&nbsp;&nbsp;</lable>
+                  <input type="text" id="platform" value="1">
+                   <input type="button"  onclick="queryPlatform()" value="查询平台">
+                </div>
+               <div >
+                    <input type="button"  id="btn_login" onclick="login()" value="登录">
+                    <input type="button"   id="btn_logout" onclick="logout()" value="退出">
+               </div>
+            </fieldset>
+            </form>
+            <form >
+            <fieldset>
+                <legend>实时播放</legend>
+                <input type="text"   id="cameraId" value="294">
+                <input type="button"  onclick="queryCameras()" value="查询相机">
+                <input type="button" id="btn_playreal" onclick="play()" value="播放">
+                <!-- <button id="btn_pause" class="pure-button pure-button-primary pure-button-disabled" onclick="onPauseClicked(this)">暂停</button> -->
+            </fieldset>
+          </form>
+    </div>
+	<script>
+        var G_InitStatus=-1;
+        $(document).ready(function() {
+            if (document.all.playOCX.object) {
+               G_InitStatus=playOCX.Init();
+            } 
+        });
+        //登录
+          function login() {
+            
+            var ip =$("#ip").val().split(":")[0];
+            var port=$("#ip").val().split(":")[1];
+            var username=$("#username").val();
+            var password=$("#passwd").val();
+            var platform=$("#platform").val();
+            playOCX.IP=ip;
+            playOCX.Port=parseInt(port);
+            playOCX.UserName=username;
+            playOCX.PassWd=password;
+            playOCX.PlatformID=platform;//平台ID
+            playOCX.SocketType=0;// 0:UDP;1:TCP
+
+            if(playOCX.Login()){
+
+                alert("登录成功!");
+            }else{
+
+                alert("登录失败!");
+            }
+        }
+        //退出
+        function logout() {
+            if(playOCX.Logout()){
+                alert("退出成功！");
+
+            }else{
+                alert("退出失败！");
+            }
+        }
+        //查询支持平台信息
+        function queryPlatform() {
+          var platforms=playOCX.GetSupportedPlatform();
+          if (platforms) {
+            alert(platforms);
+          }
+        }
+        //查询相机列表
+        function queryCameras(){
+          var cameras= playOCX.GetCameraList();
+          if (cameras) {
+            alert(cameras)
+          }
+        }
+         //视频播放 
+        function play() {
+            var cameraId=$("#cameraId").val();
+            var playResult = playOCX.StartRealPlay(cameraId);
+            //alert(playResult);
+            return false;
+        }
 	</script>
 </body>
 </html>

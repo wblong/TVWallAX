@@ -185,3 +185,10 @@ bool CPlayer::GetSelectedStatus()
 {
 	return m_bSelected;
 }
+
+
+// 播放实时视屏
+long CPlayer::StartRealPlay(long connectionID, CString cameraId)
+{
+	return m_playerItem.StartRealPlay(connectionID,cameraId);
+}

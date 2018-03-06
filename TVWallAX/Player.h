@@ -47,6 +47,8 @@ public:
 	void SetMaxSizeStatus(bool bMaxSize);
 	void SavePicture();
 	bool GetSelectedStatus();
+	// 播放实时视屏
+	long StartRealPlay(long connectionID, CString cameraId);
 };
 
 

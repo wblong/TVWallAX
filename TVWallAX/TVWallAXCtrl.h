@@ -46,6 +46,20 @@ protected:
 // 调度和事件 ID
 public:
 	enum {
+		dispidStopRealPlay = 15L,
+		dispidStartRealPlay = 14L,
+		dispidGetCameraList = 13L,
+		dispidGetSupportedPlatform = 12L,
+		dispidLogout = 11L,
+		dispidLogin = 10L,
+		dispidPlatformID = 9,
+		dispidSocketType = 8,
+		dispidPort = 7,
+		dispidPassWd = 6,
+		dispidUserName = 5,
+		dispidIP = 4,
+		dispidUnInit = 3L,
+		dispidInit = 2L,
 		dispidSetScreenNum = 1L
 	};
 	//
@@ -76,5 +90,27 @@ public:
 	int MaxiumWindow();
 	///< 恢复窗口
 	int ResetWindowSize();
+protected:
+	LONG Init();
+	LONG UnInit();
+	void OnIPChanged();
+	CString m_strIP;
+	void OnUserNameChanged();
+	CString m_strUserName;
+	void OnPassWdChanged();
+	CString m_strPassWd;
+	void OnPortChanged();
+	LONG m_nPort;
+	void OnSocketTypeChanged();
+	LONG m_nSocketType;
+	void OnPlatformIDChanged();
+	LONG m_nPlatformID;
+	LONG Login();
+	LONG Logout();
+	LONG m_nConnectionID;
+	BSTR GetSupportedPlatform();
+	BSTR GetCameraList();
+	LONG StartRealPlay(LPCTSTR cameraId);
+	LONG StopRealPlay();
 };
 
