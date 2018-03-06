@@ -146,11 +146,11 @@ void CTVWallAXCtrl::OnDraw(
 		rect.DeflateRect(0, 0, 0, 50);
 		m_playerGroup.MoveWindow(rect);///2
 		
-		int margin_left = 5, margin_top = 5 , width = 60, height = 40;
+		int margin_left = 5, margin_top = 5 , width = 40, height = 40;
 
 		for (int i = 0; i < 8; ++i){
 			GetDlgItem(IDC_ONESCREEN+i)->MoveWindow(CRect(rect.left + margin_left*(i+1)+width*i, rect.bottom + margin_top, 
-				rect.left + margin_left * (i + 1) + width* (i+1), rect.bottom + height+margin_top));
+				rect.left + margin_left * (i + 1) + width* (i+1), rect.bottom + height+margin_top-2));
 		}
 		/*GetDlgItem(IDC_ONESCREEN)->MoveWindow(CRect(rect.left+2,rect.bottom+2,rect.left+52,rect.bottom+42));
 		GetDlgItem(IDC_FOURSCREEN)->MoveWindow(CRect(rect.left + 2, rect.bottom + 2, rect.left + 52, rect.bottom + 42));

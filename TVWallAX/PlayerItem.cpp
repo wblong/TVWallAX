@@ -43,16 +43,17 @@ void CallBackMediaFunc(int sessionId, MediaData* data, void* pUserData){
 			CWnd* pWnd;
 			pWnd = CWnd::FromHandle((HWND)pUserData);
 			
-			if (pWnd){
+			if (IsWindow(pWnd->GetSafeHwnd())){
 				CRect rect;
 				pWnd->GetClientRect(&rect);
-				if (rect.Width()>0 && rect.Height()>0){
+				
+				if (rect.top!=rect.bottom||rect.right!=rect.left){
 					//Òì³£ÖÐ¶Ï
 					CDC *pDC = pWnd->GetDC();
 					
 					//pDC->Ellipse(rect);
 					pDC->SetStretchBltMode(COLORONCOLOR);
-					StretchDIBits(pDC->GetSafeHdc(), rect.left, rect.top, rect.Width(), rect.Height(), 0, 0,
+					StretchDIBits(pDC->GetSafeHdc(), rect.left, rect.top+rect.Height()/4, rect.Width(), rect.Height()*0.5, 0, 0,
 						data->imageWidth, data->imageHeight, pBGR24, &m_bmphdr, DIB_RGB_COLORS, SRCCOPY);
 					ReleaseDC(pWnd->m_hWnd, pDC->m_hDC);
 				}
