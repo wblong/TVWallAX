@@ -74,6 +74,33 @@
       <Filter>源文件</Filter>
     </None>
     <None Include="readme.md" />
+    <None Include="images\1.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="images\4.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="images\6.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="images\8.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="images\9.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="images\16.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="images\截图.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="images\录像.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="images\全屏.bmp">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TVWallAX.rc">

@@ -27,6 +27,7 @@ BEGIN_MESSAGE_MAP(CTVWallAXCtrl, COleControl)
 	ON_CONTROL(BN_CLICKED,IDC_SCREENSHOT,OnScreenShotBtnClicked)
 	ON_CONTROL(BN_CLICKED,IDC_VIDEORECORD,OnVideoRecordBtnClicked)
 	ON_WM_WINDOWPOSCHANGING()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 // 调度映射
@@ -153,6 +154,7 @@ void CTVWallAXCtrl::OnDraw(
 		for (int i = 0; i < 9; ++i){
 			GetDlgItem(IDC_ONESCREEN+i)->MoveWindow(CRect(rect.left + margin_left*(i+1)+width*i, rect.bottom + margin_top, 
 				rect.left + margin_left * (i + 1) + width* (i+1), rect.bottom + height+margin_top-2));
+			//((CBitmapButton*)GetDlgItem(IDC_ONESCREEN + i))->SizeToContent();  //使按钮适应图片大小 
 		}
 		/*GetDlgItem(IDC_ONESCREEN)->MoveWindow(CRect(rect.left+2,rect.bottom+2,rect.left+52,rect.bottom+42));
 		GetDlgItem(IDC_FOURSCREEN)->MoveWindow(CRect(rect.left + 2, rect.bottom + 2, rect.left + 52, rect.bottom + 42));
@@ -240,35 +242,46 @@ int CTVWallAXCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// TODO:  在此添加您专用的创建代码
 	m_playerGroup.Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, IDC_PLAYERGROUP);
 	//
-	DWORD dwStyle = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
+	DWORD dwStyle = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON|BS_OWNERDRAW;
 
 	CBitmapButton* OneScreen = new CBitmapButton();
-	OneScreen->Create(_T("一"), dwStyle, CRect(0,0,0,0), this, IDC_ONESCREEN);
+	OneScreen->Create(_T(""), dwStyle, CRect(0,0,0,0), this, IDC_ONESCREEN);
 
 	CBitmapButton* FourScreen = new CBitmapButton();
-	FourScreen->Create(_T("四"), dwStyle, CRect(0, 0, 0, 0), this, IDC_FOURSCREEN);
+	FourScreen->Create(_T(""), dwStyle, CRect(0, 0, 0, 0), this, IDC_FOURSCREEN);
 
 	CBitmapButton* SixScreen = new CBitmapButton();
-	SixScreen->Create(_T("六"), dwStyle, CRect(0, 0, 0, 0), this, IDC_SIXSCREEN);
+	SixScreen->Create(_T(""), dwStyle, CRect(0, 0, 0, 0), this, IDC_SIXSCREEN);
 
 	CBitmapButton* EightScreen = new CBitmapButton();
-	EightScreen->Create(_T("八"), dwStyle, CRect(0, 0, 0, 0), this, IDC_EIGHTSCREEN);
+	EightScreen->Create(_T(""), dwStyle, CRect(0, 0, 0, 0), this, IDC_EIGHTSCREEN);
 
 	CBitmapButton* NineScreen = new CBitmapButton();
-	NineScreen->Create(_T("九"), dwStyle, CRect(0, 0, 0, 0), this, IDC_NINESCREEN);
+	NineScreen->Create(_T(""), dwStyle, CRect(0, 0, 0, 0), this, IDC_NINESCREEN);
 
 	CBitmapButton* SixteenScreen = new CBitmapButton();
-	SixteenScreen->Create(_T("十六"), dwStyle, CRect(0, 0, 0, 0), this, IDC_SIXTEENSCREEN);
+	SixteenScreen->Create(_T(""), dwStyle, CRect(0, 0, 0, 0), this, IDC_SIXTEENSCREEN);
 
 	CBitmapButton* FullScreen = new CBitmapButton();
-	FullScreen->Create(_T("全屏"), dwStyle, CRect(0, 0, 0, 0), this, IDC_FULLSCREEN);
+	FullScreen->Create(_T(""), dwStyle, CRect(0, 0, 0, 0), this, IDC_FULLSCREEN);
 
 	CBitmapButton* ScreenShot = new CBitmapButton();
-	ScreenShot->Create(_T("截图"), dwStyle, CRect(0, 0, 0, 0), this, IDC_SCREENSHOT);
+	ScreenShot->Create(_T(""), dwStyle, CRect(0, 0, 0, 0), this, IDC_SCREENSHOT);
 
 	CBitmapButton* VideoRecord = new CBitmapButton();
-	VideoRecord->Create(_T("录像"), dwStyle, CRect(0, 0, 0, 0), this, IDC_VIDEORECORD);
+	VideoRecord->Create(_T(""), dwStyle, CRect(0, 0, 0,0), this, IDC_VIDEORECORD);
+	//VideoRecord->LoadBitmaps(IDB_VIDEORECORD);
+	//m_btButton.LoadBitmaps(IDB_BITMAP1,IDB_BITMAP2,IDB_BITMAP3,IDB_BITMAP4);   //载入  
+	//m_btButton.SizeToContent();  //使按钮适应图片大小  
 
+	for (int i = 0; i < 9; ++i){
+
+		((CBitmapButton*)GetDlgItem(IDC_ONESCREEN + i))->LoadBitmaps(IDB_ONESCREEN + i,
+			IDB_ONESCREEN + i, IDB_ONESCREEN + i, IDB_ONESCREEN + i);   //载入;
+		//((CBitmapButton*)GetDlgItem(IDC_ONESCREEN + i))->SizeToContent();  //使按钮适应图片大小 
+		//((CBitmapButton*)GetDlgItem(IDC_ONESCREEN + i))->EnableWindow();
+	}
+	
 	return 0;
 }
 
@@ -634,4 +647,12 @@ LONG CTVWallAXCtrl::StartLocalRecord()
 	// TODO:  在此添加调度处理程序代码
 	if (m_nConnectionID > 0)
 		return m_playerGroup.StartLocalRecord();
+}
+
+
+void CTVWallAXCtrl::OnSize(UINT nType, int cx, int cy)
+{
+	COleControl::OnSize(nType, cx, cy);
+
+	// TODO:  在此处添加消息处理程序代码
 }

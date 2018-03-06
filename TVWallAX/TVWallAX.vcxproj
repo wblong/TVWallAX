@@ -236,6 +236,15 @@
     <ClInclude Include="TVWallAXPropPage.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="images\1.bmp" />
+    <None Include="images\16.bmp" />
+    <None Include="images\4.bmp" />
+    <None Include="images\6.bmp" />
+    <None Include="images\8.bmp" />
+    <None Include="images\9.bmp" />
+    <None Include="images\全屏.bmp" />
+    <None Include="images\录像.bmp" />
+    <None Include="images\截图.bmp" />
     <None Include="readme.md" />
     <None Include="TVWallAX.def" />
   </ItemGroup>
