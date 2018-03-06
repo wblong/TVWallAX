@@ -140,11 +140,13 @@ void CTVWallAXCtrl::OnDraw(
 {
 	if (!pdc)
 		return;
-	//±³¾°ÑÕÉ«
-	pdc->FillSolidRect(rcBounds,RGB(0,0,0));
+	
 
 	if (m_playerGroup)
 	{
+		//±³¾°ÑÕÉ«
+		pdc->FillSolidRect(rcBounds, RGB(0, 0, 0));
+
 		CRect rect = rcBounds;
 		rect.DeflateRect(0, 0, 0, 50);
 		m_playerGroup.MoveWindow(rect);///2
@@ -162,6 +164,9 @@ void CTVWallAXCtrl::OnDraw(
 		GetDlgItem(IDC_EIGHTSCREEN)->MoveWindow(CRect(rect.left + 2, rect.bottom + 2, rect.left + 52, rect.bottom + 42));
 		GetDlgItem(IDC_NINESCREEN)->MoveWindow(CRect(rect.left + 2, rect.bottom + 2, rect.left + 52, rect.bottom + 42));
 		GetDlgItem(IDC_SIXTEENSCREEN)->MoveWindow(CRect(rect.left + 2, rect.bottom + 2, rect.left + 52, rect.bottom + 42));*/
+	}
+	else{
+		pdc->FillSolidRect(rcBounds, RGB(0, 0, 0));
 	}
 	//DoSuperclassPaint(pdc, rcBounds);
 }
