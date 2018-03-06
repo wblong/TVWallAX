@@ -46,6 +46,10 @@ protected:
 // 调度和事件 ID
 public:
 	enum {
+		dispidSetInterval = 20L,
+		dispidGetScreenCount = 19L,
+		dispidStopPlayBatch = 18L,
+		dispidPlayBatch = 17L,
 		dispidStartLocalRecord = 16L,
 		dispidStopRealPlay = 15L,
 		dispidStartRealPlay = 14L,
@@ -119,5 +123,10 @@ protected:
 	LONG StartLocalRecord();
 public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+protected:
+	void PlayBatch(LPCTSTR cameraIds);
+	void StopPlayBatch();
+	LONG GetScreenCount();
+	void SetInterval(LONG millisecond);
 };
 

@@ -53,7 +53,7 @@ void CallBackMediaFunc(int sessionId, MediaData* data, void* pUserData){
 					
 					//pDC->Ellipse(rect);
 					pDC->SetStretchBltMode(COLORONCOLOR);
-					StretchDIBits(pDC->GetSafeHdc(), rect.left, rect.top+rect.Height()/4, rect.Width(), rect.Height()*0.5, 0, 0,
+					StretchDIBits(pDC->GetSafeHdc(), rect.left, rect.top, rect.Width(), rect.Height(), 0, 0,
 						data->imageWidth, data->imageHeight, pBGR24, &m_bmphdr, DIB_RGB_COLORS, SRCCOPY);
 					ReleaseDC(pWnd->m_hWnd, pDC->m_hDC);
 				}
@@ -287,6 +287,7 @@ long CPlayerItem::StartRealPlay(long connectionId, CString cameraId)
 	else{
 		//关闭先前的
 		TCS_StopRealPlay(m_nSessionID);
+		m_nSessionID = -1;
 	}
 	return m_nSessionID;
 }

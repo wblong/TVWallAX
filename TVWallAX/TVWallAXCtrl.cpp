@@ -49,6 +49,10 @@ BEGIN_DISPATCH_MAP(CTVWallAXCtrl, COleControl)
 	DISP_FUNCTION_ID(CTVWallAXCtrl, "StartRealPlay", dispidStartRealPlay, StartRealPlay, VT_I4, VTS_BSTR)
 	DISP_FUNCTION_ID(CTVWallAXCtrl, "StopRealPlay", dispidStopRealPlay, StopRealPlay, VT_I4, VTS_NONE)
 	DISP_FUNCTION_ID(CTVWallAXCtrl, "StartLocalRecord", dispidStartLocalRecord, StartLocalRecord, VT_I4, VTS_NONE)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "PlayBatch", dispidPlayBatch, PlayBatch, VT_EMPTY, VTS_BSTR)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "StopPlayBatch", dispidStopPlayBatch, StopPlayBatch, VT_EMPTY, VTS_NONE)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "GetScreenCount", dispidGetScreenCount, GetScreenCount, VT_I4, VTS_NONE)
+	DISP_FUNCTION_ID(CTVWallAXCtrl, "SetInterval", dispidSetInterval, SetInterval, VT_EMPTY, VTS_I4)
 END_DISPATCH_MAP()
 
 // 事件映射
@@ -531,6 +535,7 @@ LONG CTVWallAXCtrl::Login()
 	loginInfo.st = m_nSocketType == 0 ? TCS_UDP : TCS_TCP;
 	m_nConnectionID = TCS_Login(m_nPlatformID, &loginInfo);
 	if (TCSResult::Failed != m_nConnectionID){
+		m_playerGroup.SetConnectionID(m_nConnectionID);
 		return m_nConnectionID;
 	}
 	else{
@@ -660,4 +665,43 @@ void CTVWallAXCtrl::OnSize(UINT nType, int cx, int cy)
 	COleControl::OnSize(nType, cx, cy);
 
 	// TODO:  在此处添加消息处理程序代码
+}
+
+//!开始轮播
+void CTVWallAXCtrl::PlayBatch(LPCTSTR cameraIds)
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加调度处理程序代码
+	m_playerGroup.SetCamerasIDS(cameraIds);
+	if (m_nConnectionID>-1)
+		m_playerGroup.StartBatchPlay(m_nConnectionID);
+}
+
+//!停止轮播
+void CTVWallAXCtrl::StopPlayBatch()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加调度处理程序代码
+	if (m_nConnectionID > -1)
+		m_playerGroup.StopPlayBatch();
+}
+
+//!获取分屏数目
+LONG CTVWallAXCtrl::GetScreenCount()
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加调度处理程序代码
+	return m_playerGroup.GetScreenCount();
+}
+
+
+void CTVWallAXCtrl::SetInterval(LONG millisecond)
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	// TODO:  在此添加调度处理程序代码
+	m_playerGroup.SetInterval(millisecond);
 }

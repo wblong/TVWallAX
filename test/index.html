@@ -113,6 +113,8 @@
         }
         //停止播放
         function stopPlay() {
+            //获取分屏数目
+            //alert(playOCX.GetScreenCount());
             var playResult = playOCX.StopRealPlay();
             if (playResult >-1) {
                 return true;

@@ -6,13 +6,19 @@
 #include "PlayerGroup.h"
 // CPlayerGroup
 
+#define ID_TIMER 1
+
 IMPLEMENT_DYNAMIC(CPlayerGroup, CWnd)
 
 CPlayerGroup::CPlayerGroup()
+: m_nCurrentIndex(0)
 {
 	m_nCount = 16;
 	m_nplayWindowCount = 16;
 	m_nActivePlayer = 0;
+	//默认轮播时间10s
+	m_nPlayBatchTime = 10000;
+	m_nConnectionID = -1;
 }
 
 CPlayerGroup::~CPlayerGroup()
@@ -28,6 +34,7 @@ BEGIN_MESSAGE_MAP(CPlayerGroup, CWnd)
 	ON_WM_SIZE()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONDBLCLK()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -462,4 +469,112 @@ long CPlayerGroup::StartLocalRecord()
 		MessageBox(_T("请单击选择分屏"), _T("提示"));
 	}
 	return -1;
+}
+
+
+// 获取分屏数目
+long CPlayerGroup::GetScreenCount()
+{
+	return (long)m_nCount;
+}
+//分割字符串
+void CPlayerGroup::StringSplit(CString source, CStringArray& dest, char division)
+{
+	if (source.IsEmpty())
+	{
+
+	}
+	else
+	{   //递归调用
+		int pos = source.Find(division);
+		if (pos == -1)
+		{
+			dest.Add(source);
+		}
+		else
+		{
+			dest.Add(source.Left(pos));
+			source = source.Mid(pos + 1);
+			StringSplit(source, dest, division);
+		}
+	}
+}
+
+// 设置轮播时间
+void CPlayerGroup::SetInterval(long  millisecond)
+{
+	m_nPlayBatchTime = millisecond;
+}
+
+//
+void CPlayerGroup::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	BatchPlay(m_nConnectionID);
+	CWnd::OnTimer(nIDEvent);
+}
+
+
+// 开始轮播
+void CPlayerGroup::StartBatchPlay(int connectionID)
+{
+	//已经在轮播直接返回
+	
+	BatchPlay(connectionID);
+	//
+	SetTimer(ID_TIMER, m_nPlayBatchTime, NULL);
+}
+
+
+// 设置相机列表
+void CPlayerGroup::SetCamerasIDS(CString camerasIds)
+{	
+	if (m_strArrCameras.GetSize() > 0){
+		MessageBox("请先关闭轮播！", "提示");
+		return;
+	}
+	StringSplit(camerasIds, m_strArrCameras, ';');
+}
+
+
+// 停止轮播
+void CPlayerGroup::StopPlayBatch()
+{
+	KillTimer(ID_TIMER);
+    m_strArrCameras.RemoveAll();
+	MessageBox("停止轮播", "提示");
+}
+
+
+// 轮播
+void CPlayerGroup::BatchPlay(int connectionID)
+{
+	int size = m_strArrCameras.GetSize();
+	int count = m_nCount;
+	//关闭先前的
+	int i, j;
+	CString	index;
+
+	for (i = m_nCurrentIndex; i <= size; ++i){
+		j = i%count;
+		if (j == 0 && i != m_nCurrentIndex){
+			m_nCurrentIndex = i;
+			break;
+		}
+		if (i == size){
+			m_nCurrentIndex = i%size;
+			break;
+		}
+		index = m_strArrCameras.GetAt(i);
+		m_player[j].StartRealPlay(connectionID, index);
+		
+
+	}
+}
+
+
+// 设置连接ID
+void CPlayerGroup::SetConnectionID(int connectionID)
+{
+	m_nConnectionID = connectionID;
 }

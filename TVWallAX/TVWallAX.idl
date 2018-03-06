@@ -37,6 +37,10 @@ library TVWallAXLib
 			[id(14)] LONG StartRealPlay(BSTR cameraId);
 			[id(15)] LONG StopRealPlay();
 			[id(16)] LONG StartLocalRecord();
+			[id(17)] void PlayBatch(BSTR cameraIds);
+			[id(18)] void StopPlayBatch();
+			[id(19)] LONG GetScreenCount();
+			[id(20)] void SetInterval(LONG millisecond);
 	};
 
 	//  CTVWallAXCtrl 的事件调度接口
