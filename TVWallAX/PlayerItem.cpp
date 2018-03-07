@@ -53,9 +53,10 @@ void CallBackMediaFunc(int sessionId, MediaData* data, void* pUserData){
 					
 					//pDC->Ellipse(rect);
 					pDC->SetStretchBltMode(COLORONCOLOR);
-					StretchDIBits(pDC->GetSafeHdc(), rect.left, rect.top, rect.Width(), rect.Height(), 0, 0,
+					StretchDIBits(pDC->GetSafeHdc(), rect.left, rect.top+rect.Height()*0.25, rect.Width(), rect.Height()*0.5, 0, 0,
 						data->imageWidth, data->imageHeight, pBGR24, &m_bmphdr, DIB_RGB_COLORS, SRCCOPY);
 					ReleaseDC(pWnd->m_hWnd, pDC->m_hDC);
+					//pWnd->RedrawWindow();
 				}
 			}
 		}
@@ -276,19 +277,17 @@ void CPlayerItem::SavePicture()
 // 播放实时视频
 long CPlayerItem::StartRealPlay(long connectionId, CString cameraId)
 {
-	if (m_nSessionID <0)
-	{
-		//记录相机ID
-		m_strCameraID = cameraId;
-		//播放视屏
-		m_nSessionID = TCS_StartRealPlay(connectionId, cameraId,
-			MainStream, CallBackMediaFunc, this->GetSafeHwnd());
-	}
-	else{
+	if (m_nSessionID > -1){
 		//关闭先前的
 		TCS_StopRealPlay(m_nSessionID);
 		m_nSessionID = -1;
 	}
+		//记录相机ID
+	m_strCameraID = cameraId;
+	//播放视屏
+	m_nSessionID = TCS_StartRealPlay(connectionId, cameraId,
+		MainStream, CallBackMediaFunc, this->GetSafeHwnd());
+	
 	return m_nSessionID;
 }
 

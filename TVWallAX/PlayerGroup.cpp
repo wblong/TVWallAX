@@ -13,7 +13,7 @@ IMPLEMENT_DYNAMIC(CPlayerGroup, CWnd)
 CPlayerGroup::CPlayerGroup()
 : m_nCurrentIndex(0)
 {
-	m_nCount = 16;
+	m_nCount = 4;
 	m_nplayWindowCount = 16;
 	m_nActivePlayer = 0;
 	//默认轮播时间10s
@@ -75,7 +75,7 @@ void CPlayerGroup::RecalWndPos()
 
 		nWidth = rcWindow.Width() / 2;
 		nHeight = rcWindow.Height() / 2;
-		m_rcWnd[0] = CRect(0, 0, nWidth, nHeight);
+		m_rcWnd[0] = CRect(0, 0, nWidth, nHeight); 
 		m_rcWnd[1] = CRect(nWidth, 0, rcWindow.Width(), nHeight);
 		m_rcWnd[2] = CRect(0, nHeight, nWidth, rcWindow.Height());
 		m_rcWnd[3] = CRect(nWidth, nHeight, rcWindow.Width(), rcWindow.Height());
@@ -552,6 +552,8 @@ void CPlayerGroup::BatchPlay(int connectionID)
 	int size = m_strArrCameras.GetSize();
 	int count = m_nCount;
 	//关闭先前的
+	for (int i = 0; i < m_nCount; ++i)
+		m_player[i].StopRealPlay();
 	int i, j;
 	CString	index;
 
