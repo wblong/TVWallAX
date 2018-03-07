@@ -53,7 +53,7 @@ void CallBackMediaFunc(int sessionId, MediaData* data, void* pUserData){
 					
 					//pDC->Ellipse(rect);
 					pDC->SetStretchBltMode(COLORONCOLOR);
-					StretchDIBits(pDC->GetSafeHdc(), rect.left, rect.top+rect.Height()*0.25, rect.Width(), rect.Height()*0.5, 0, 0,
+					StretchDIBits(pDC->GetSafeHdc(), rect.left, rect.top, rect.Width(), rect.Height(), 0, 0,
 						data->imageWidth, data->imageHeight, pBGR24, &m_bmphdr, DIB_RGB_COLORS, SRCCOPY);
 					ReleaseDC(pWnd->m_hWnd, pDC->m_hDC);
 					//pWnd->RedrawWindow();
@@ -173,7 +173,7 @@ BOOL CPlayerItem::OnEraseBkgnd(CDC* pDC)
 	rcWindow.OffsetRect(-rcWindow.TopLeft());
 	pDC->FillSolidRect(&rcWindow,RGB(120,120,120));
 	CString str;
-	str.Format(_T("%d"),this->GetDlgCtrlID()-IDC_PLAYERITEM+1);
+	str.Format(_T("%d:%s"),this->GetDlgCtrlID()-IDC_PLAYERITEM+1,"NO VIDEO");
 	pDC->DrawText(str, rcWindow, DT_SINGLELINE | DT_VCENTER|DT_CENTER);
 	return true;
 	//return CWnd::OnEraseBkgnd(pDC);

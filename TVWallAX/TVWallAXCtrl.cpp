@@ -22,7 +22,7 @@ BEGIN_MESSAGE_MAP(CTVWallAXCtrl, COleControl)
 	ON_OLEVERB(AFX_IDS_VERB_PROPERTIES, OnProperties)
 	ON_WM_CREATE()
 	ON_WM_LBUTTONDOWN()
-	ON_CONTROL_RANGE(BN_CLICKED,IDC_ONESCREEN,IDC_SIXTEENSCREEN,OnScreenBtnClicked)
+	ON_CONTROL_RANGE(BN_CLICKED,IDC_ONESCREEN,IDC_FOURSCREEN,OnScreenBtnClicked)
 	ON_CONTROL(BN_CLICKED,IDC_FULLSCREEN,OnFullScreenBtnClicked)
 	ON_CONTROL(BN_CLICKED,IDC_SCREENSHOT,OnScreenShotBtnClicked)
 	ON_CONTROL(BN_CLICKED,IDC_VIDEORECORD,OnVideoRecordBtnClicked)
@@ -157,7 +157,7 @@ void CTVWallAXCtrl::OnDraw(
 		
 		int margin_left = 5, margin_top = 5 , width = 40, height = 40;
 
-		for (int i = 0; i < 9; ++i){
+		for (int i = 0; i < 5; ++i){
 			GetDlgItem(IDC_ONESCREEN+i)->MoveWindow(CRect(rect.left + margin_left*(i+1)+width*i, rect.bottom + margin_top, 
 				rect.left + margin_left * (i + 1) + width* (i+1), rect.bottom + height+margin_top-2));
 			//((CBitmapButton*)GetDlgItem(IDC_ONESCREEN + i))->SizeToContent();  //使按钮适应图片大小 
@@ -258,19 +258,6 @@ int CTVWallAXCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	CBitmapButton* FourScreen = new CBitmapButton();
 	FourScreen->Create(_T(""), dwStyle, CRect(0, 0, 0, 0), this, IDC_FOURSCREEN);
-
-	CBitmapButton* SixScreen = new CBitmapButton();
-	SixScreen->Create(_T(""), dwStyle, CRect(0, 0, 0, 0), this, IDC_SIXSCREEN);
-
-	CBitmapButton* EightScreen = new CBitmapButton();
-	EightScreen->Create(_T(""), dwStyle, CRect(0, 0, 0, 0), this, IDC_EIGHTSCREEN);
-
-	CBitmapButton* NineScreen = new CBitmapButton();
-	NineScreen->Create(_T(""), dwStyle, CRect(0, 0, 0, 0), this, IDC_NINESCREEN);
-
-	CBitmapButton* SixteenScreen = new CBitmapButton();
-	SixteenScreen->Create(_T(""), dwStyle, CRect(0, 0, 0, 0), this, IDC_SIXTEENSCREEN);
-
 	CBitmapButton* FullScreen = new CBitmapButton();
 	FullScreen->Create(_T(""), dwStyle, CRect(0, 0, 0, 0), this, IDC_FULLSCREEN);
 
@@ -283,7 +270,7 @@ int CTVWallAXCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//m_btButton.LoadBitmaps(IDB_BITMAP1,IDB_BITMAP2,IDB_BITMAP3,IDB_BITMAP4);   //载入  
 	//m_btButton.SizeToContent();  //使按钮适应图片大小  
 
-	for (int i = 0; i < 9; ++i){
+	for (int i = 0; i < 5; ++i){
 
 		((CBitmapButton*)GetDlgItem(IDC_ONESCREEN + i))->LoadBitmaps(IDB_ONESCREEN + i,
 			IDB_ONESCREEN + i, IDB_ONESCREEN + i, IDB_ONESCREEN + i);   //载入;
@@ -330,19 +317,6 @@ void CTVWallAXCtrl::OnScreenBtnClicked(UINT uId){
 		break;
 	case IDC_FOURSCREEN:
 		Num = 4;
-		break;
-	case IDC_SIXSCREEN:
-		Num = 6;
-		break;
-	case IDC_EIGHTSCREEN:
-		Num = 8;
-		break;
-	case IDC_NINESCREEN:
-		Num = 9;
-
-		break;
-	case IDC_SIXTEENSCREEN:
-		Num = 16;
 		break;
 
 	}
